@@ -11,8 +11,15 @@
 **************************************************************************
  Contains the entry point of the program.
 **************************************************************************/
+#include "Application.h"
 
 int main (int argc, char **argv)
 {
-	return EXIT_SUCCESS;
+	Application *app = new Application;
+
+	int result = app->go();
+
+	delete app;
+
+	return result;
 }
