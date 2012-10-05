@@ -6,6 +6,7 @@
 
 class Application
 {
+	bool initOgre();
 
 public:
 	int go();
