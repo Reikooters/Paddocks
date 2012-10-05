@@ -11,6 +11,7 @@
 #include <OgreViewport.h>
 #include <OgreSceneManager.h>
 #include <OgreRenderWindow.h>
+#include <OgreRenderSystem.h>
 #include <OgreEntity.h>
 #include <OgreWindowEventUtilities.h>
  
@@ -21,4 +22,6 @@
 #endif
 
 #include <cstdlib>
+#include <memory>
+#include <exception>
 #include <vld.h>
