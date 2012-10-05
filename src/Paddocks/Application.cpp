@@ -173,3 +173,21 @@ bool Application::initOgre()
 
 	return true;
 }
+
+
+/*************************************************************************
+ * Application::mainLoop()
+ *************************************************************************
+ * Main render loop.
+ *************************************************************************/
+void Application::mainLoop()
+{
+	while (!window->isClosed())
+	{
+		/* We call messagePump() to let the messages between the application
+		 * and the OS go through. For example, moving the window, closing
+		 * the window, etc. If we don't call this then the user won't be
+		 * able to click or use the window at all. */
+		Ogre::WindowEventUtilities::messagePump();
+	}
+}

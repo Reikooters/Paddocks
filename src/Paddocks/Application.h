@@ -7,6 +7,7 @@
 class Application
 {
 	bool initOgre();
+	void mainLoop();
 
 public:
 	int go();
