@@ -15,11 +15,9 @@
 
 int main (int argc, char **argv)
 {
-	Application *app = new Application;
+	std::auto_ptr<Application> app(new Application());
 
 	int result = app->go();
-
-	delete app;
 
 	return result;
 }
