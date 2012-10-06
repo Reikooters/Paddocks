@@ -38,9 +38,12 @@ Application::~Application()
  *************************************************************************/
 int Application::go()
 {
-	// Initialise Ogre
+	// Initialise Ogre.
 	if (!initOgre())
 		return EXIT_FAILURE;
+
+	// Start main program loop.
+	mainLoop();
 
 	// Program finished successfully.
 	return EXIT_SUCCESS;
@@ -66,8 +69,9 @@ bool Application::initOgre()
 	/* Create the Ogre Root, telling it the log filename we want to use.
 	 * We aren't loading the plugin list or config from file, so these
 	 * are left blank. */
-	std::auto_ptr<Ogre::Root> root(
-		new Ogre::Root("", "", logFilename));
+	//std::auto_ptr<Ogre::Root> root(
+	//	new Ogre::Root("", "", logFilename));
+	ogrePtrs.root.reset(new Ogre::Root("", "", logFilename));
 
 	// STEP 2: Load plugins
 	// ------------------------------------
@@ -97,7 +101,7 @@ bool Application::initOgre()
 				if (OGRE_DEBUG_MODE)
 					pluginName.append("_d");
 
-				root->loadPlugin(pluginName);
+				ogrePtrs.root->loadPlugin(pluginName);
 			}
 		}
 	}
@@ -108,7 +112,7 @@ bool Application::initOgre()
 	{
 		/* Get a list of the available renderers. The only one should be
 		 * the one we loaded with the plugins earlier. */
-		const Ogre::RenderSystemList& renderSystemList = root->getAvailableRenderers();
+		const Ogre::RenderSystemList& renderSystemList = ogrePtrs.root->getAvailableRenderers();
 		std::cout << renderSystemList.size() << std::endl;
 
 		// If there isn't only one, return an error.
@@ -120,7 +124,7 @@ bool Application::initOgre()
 
 		/* Assign the Root's RenderSystem as the first RenderSystem
 		 * that was found. */
-		root->setRenderSystem( renderSystemList[0] );
+		ogrePtrs.root->setRenderSystem( renderSystemList[0] );
 	}
 
 	// STEP 4: Initialise the Root
@@ -138,12 +142,11 @@ bool Application::initOgre()
 		// Custom capabilities of the RenderSystem.
 		Ogre::String customCapabilities = "";
 
-		root->initialise(createAWindowAutomatically, windowTitle, customCapabilities);
+		ogrePtrs.root->initialise(createAWindowAutomatically, windowTitle, customCapabilities);
 	}
 
 	// STEP 5: Create the render window
 	// ------------------------------------
-	Ogre::RenderWindow* window = NULL;
 	{
 		// First we configure the window we are going to create.
 
@@ -168,7 +171,7 @@ bool Application::initOgre()
 		params["vsync"] = "true";
 
 		// Create the render window
-		window = root->createRenderWindow(windowTitle, width, height, fullscreen, &params);
+		ogrePtrs.window = ogrePtrs.root->createRenderWindow(windowTitle, width, height, fullscreen, &params);
 	}
 
 	return true;
@@ -182,7 +185,7 @@ bool Application::initOgre()
  *************************************************************************/
 void Application::mainLoop()
 {
-	while (!window->isClosed())
+	while (!ogrePtrs.window->isClosed())
 	{
 		/* We call messagePump() to let the messages between the application
 		 * and the OS go through. For example, moving the window, closing
