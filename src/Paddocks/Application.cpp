@@ -108,7 +108,6 @@ bool Application::initOgre()
 
 	// STEP 3: Select the RenderSystem
 	// ------------------------------------
-
 	{
 		/* Get a list of the available renderers. The only one should be
 		 * the one we loaded with the plugins earlier. */
@@ -131,7 +130,6 @@ bool Application::initOgre()
 	// ------------------------------------
 	/* The Root can be initialised only once the RenderSystem has been
 	 * selected. */
-
 	{
 		// We won't automatically create the render window.
 		bool createAWindowAutomatically = false;
