@@ -17,7 +17,20 @@ int main (int argc, char **argv)
 {
 	std::auto_ptr<Application> app(new Application());
 
-	int result = app->go();
+	int result = EXIT_FAILURE;
+
+	try
+	{
+		result = app->go();
+	}
+	catch(std::exception& e)
+	{
+#if OGRE_PLATFORM == PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+		MessageBoxA(NULL, e.what(), "An exception has occurred!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
+#else
+		fprintf(stderr, "An exception has occurred: %s\n", e.what());
+#endif
+	}
 
 	return result;
 }
