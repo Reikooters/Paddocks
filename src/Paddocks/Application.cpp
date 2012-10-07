@@ -192,3 +192,40 @@ void Application::mainLoop()
 		Ogre::WindowEventUtilities::messagePump();
 	}
 }
+
+
+/*************************************************************************
+ * Application::createScene()
+ *************************************************************************
+ * Sets up the scene.
+ *************************************************************************/
+bool Application::createScene()
+{
+	// Don't create the scene if the root hasn't been created.
+	if (!ogrePtrs.root.get())
+		return false;
+
+	// If the scene has already been created, don't create it again.
+	if (ogrePtrs.sceneManager)
+		return false;
+
+	/* Create a scene manager. We are using the ST_GENERIC type, which
+	 * uses the OctreeSceneManager. This one will be the most efficient
+	 * one for our purpose. */
+	ogrePtrs.sceneManager = ogrePtrs.root->createSceneManager(Ogre::ST_GENERIC);
+
+	// Get a pointer to the root scene node of the scene manager.
+	ogrePtrs.rootSceneNode = ogrePtrs.sceneManager->getRootSceneNode();
+
+	// Create a camera.
+	ogrePtrs.camera = ogrePtrs.sceneManager->createCamera("Camera");
+
+	/* Create the viewport. Since we want this to cover the whole screen,
+	 * we don't specify the width, height, etc. parameters. */
+	ogrePtrs.viewport = ogrePtrs.window->addViewport(ogrePtrs.camera);
+
+	// Set the drawing background colour.
+	ogrePtrs.viewport->setBackgroundColour(Ogre::ColourValue(1.0f, 0.0f, 1.0f));
+
+	return true;
+}
