@@ -3,9 +3,8 @@
 **************************************************************************
  Application class.
 **************************************************************************/
+#include "PaddocksFrameListener.h"
 
-// Forward declaration
-class PaddocksFrameListener;
 
 class Application
 {
@@ -43,5 +42,4 @@ public:
 	int go();
 
 	Application();
-	~Application();
 };
