@@ -3,7 +3,7 @@
 // Happens on STL member variables which are not public therefore is ok
 #   pragma warning (disable : 4251)
  
-// Ogre headers you need
+// Ogre headers needed
 #include <OgreException.h>
 #include <OgreRoot.h>
 #include <OgreConfigFile.h>
@@ -14,6 +14,7 @@
 #include <OgreRenderSystem.h>
 #include <OgreEntity.h>
 #include <OgreWindowEventUtilities.h>
+#include <OgreUTFString.h>
  
 // any other header can be included, as usual
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

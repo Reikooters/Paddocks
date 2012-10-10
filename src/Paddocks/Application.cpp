@@ -27,6 +27,9 @@ Application::Application()
  *************************************************************************/
 int Application::go()
 {
+	// Load config.ini.
+	loadConfigIni();
+
 	// Initialise Ogre.
 	if (!initOgre())
 		return EXIT_FAILURE;
@@ -101,7 +104,6 @@ bool Application::initOgre()
 		/* Get a list of the available renderers. The only one should be
 		 * the one we loaded with the plugins earlier. */
 		const Ogre::RenderSystemList& renderSystemList = ogrePtrs.root->getAvailableRenderers();
-		std::cout << renderSystemList.size() << std::endl;
 
 		// If there isn't only one, return an error.
 		if( renderSystemList.size() != 1 )
@@ -241,4 +243,28 @@ bool Application::createScene()
 		Ogre::Real(ogrePtrs.viewport->getActualWidth()) / Ogre::Real(ogrePtrs.viewport->getActualHeight()));
 
 	return true;
+}
+
+
+/*************************************************************************
+ * Application::loadConfigIni()
+ *************************************************************************
+ * Load data from config.ini.
+ *************************************************************************/
+void Application::loadConfigIni()
+{
+	Ogre::ConfigFile *config = new Ogre::ConfigFile();
+	config->load("config.ini");
+
+	Ogre::String fullscreen = config->getSetting("fullscreen", Ogre::StringUtil::BLANK, "false");
+	MessageBoxA(NULL, fullscreen.c_str(), "Full Screen", 0);
+
+	Ogre::String fsaa = config->getSetting("fsaa", Ogre::StringUtil::BLANK, "0");
+	MessageBoxA(NULL, fsaa.c_str(), "FSAA", 0);
+
+	Ogre::String width = config->getSetting("width", Ogre::StringUtil::BLANK, "800");
+	MessageBoxA(NULL, width.c_str(), "Width", 0);
+
+	Ogre::String height = config->getSetting("height", Ogre::StringUtil::BLANK, "600");
+	MessageBoxA(NULL, height.c_str(), "Height", 0);
 }
