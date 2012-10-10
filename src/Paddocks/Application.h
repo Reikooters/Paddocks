@@ -4,11 +4,13 @@
  Application class.
 **************************************************************************/
 
+// Forward declaration
+class PaddocksFrameListener;
+
 class Application
 {
-	bool initOgre();
-	bool createScene();
-	void mainLoop();
+	// Variables
+	std::auto_ptr<PaddocksFrameListener> frameListener;
 
 	struct OgrePtrs
 	{
@@ -30,6 +32,12 @@ class Application
 			camera(NULL), viewport(NULL)
 		{ }
 	} ogrePtrs;
+
+
+	// Functions
+	bool initOgre();
+	bool createScene();
+	void mainLoop();
 
 public:
 	int go();

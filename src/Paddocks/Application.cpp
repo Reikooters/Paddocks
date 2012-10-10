@@ -4,6 +4,7 @@
  * Application class.
  *************************************************************************/
 #include "Application.h"
+#include "PaddocksFrameListener.h"
 
 
 /*************************************************************************
@@ -13,7 +14,7 @@
  *************************************************************************/
 Application::Application()
 {
-
+	frameListener.reset(new PaddocksFrameListener());
 }
 
 
@@ -172,6 +173,12 @@ bool Application::initOgre()
 		ogrePtrs.window = ogrePtrs.root->createRenderWindow(windowTitle, width, height, fullscreen, &params);
 	}
 
+	// STEP 6: Assign the frame listener
+	// ------------------------------------
+	{
+		ogrePtrs.root->addFrameListener(frameListener.get());
+	}
+
 	return true;
 }
 
@@ -179,17 +186,30 @@ bool Application::initOgre()
 /*************************************************************************
  * Application::mainLoop()
  *************************************************************************
- * Main render loop.
+ * Main program loop.
  *************************************************************************/
 void Application::mainLoop()
 {
-	while (!ogrePtrs.window->isClosed())
+	/* Clear any events (clicks, etc) that were created while the
+	 * window was being created. */
+	ogrePtrs.root->clearEventTimes();
+
+	// Main program loop.
+	while (true)
 	{
 		/* We call messagePump() to let the messages between the application
 		 * and the OS go through. For example, moving the window, closing
 		 * the window, etc. If we don't call this then the user won't be
 		 * able to click or use the window at all. */
 		Ogre::WindowEventUtilities::messagePump();
+
+		// Stop rendering when the window is closed.
+		if (ogrePtrs.window->isClosed())
+			return;
+
+		// Or when renderOneFrame() returns false.
+		if (!ogrePtrs.root->renderOneFrame())
+			return;
 	}
 }
 
@@ -213,6 +233,7 @@ bool Application::createScene()
 	 * uses the OctreeSceneManager. This one will be the most efficient
 	 * one for our purpose. */
 	ogrePtrs.sceneManager = ogrePtrs.root->createSceneManager(Ogre::ST_GENERIC);
+	ogrePtrs.sceneManager->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
 
 	// Get a pointer to the root scene node of the scene manager.
 	ogrePtrs.rootSceneNode = ogrePtrs.sceneManager->getRootSceneNode();
@@ -226,6 +247,10 @@ bool Application::createScene()
 
 	// Set the drawing background colour.
 	ogrePtrs.viewport->setBackgroundColour(Ogre::ColourValue(1.0f, 0.0f, 1.0f));
+
+	// Alter the camera aspect ratio to match the viewport
+	ogrePtrs.camera->setAspectRatio(
+		Ogre::Real(ogrePtrs.viewport->getActualWidth()) / Ogre::Real(ogrePtrs.viewport->getActualHeight()));
 
 	return true;
 }
