@@ -8,8 +8,12 @@
  * https://github.com/Reikooters/Paddocks
  *************************************************************************
  * ConfigIni.cpp
+ *************************************************************************
+ * This file contains the definitions for the functions declared in the
+ * ConfigIni class. See ConfigIni.cpp for details on this class.
  *************************************************************************/
 #include "ConfigIni.h"
+
 
 /*************************************************************************
  * ConfigIni::ConfigIni
@@ -19,7 +23,7 @@
  *************************************************************************/
 ConfigIni::ConfigIni(Ogre::String &filename)
 {
-	config.load(filename);
+	configFile.load(filename);
 }
 
 
@@ -28,7 +32,7 @@ ConfigIni::ConfigIni(Ogre::String &filename)
  *************************************************************************
  * Returns a copy of the Ogre::ConfigFile.
  *************************************************************************/
-inline Ogre::ConfigFile ConfigIni::getConfig()
+inline ConfigIni::Configurations ConfigIni::getConfig()
 {
-	return config;
+	return configurations;
 }

@@ -1,11 +1,23 @@
+#pragma once
 /*************************************************************************
- * Application.h
+ * Paddocks
+ * by Shane "Reiko" Swenson - October 2012.
+ * 
+ * Computer version of the pen and paper game, 'Paddocks' also known as
+ * 'Dots and Boxes'.
+ * 	
+ * https://github.com/Reikooters/Paddocks
  *************************************************************************
- * Application class.
+ * Application.h
  *************************************************************************/
 #include "PaddocksFrameListener.h"
 
 
+/*************************************************************************
+ * class Application.
+ *************************************************************************
+ * Application class.
+ *************************************************************************/
 class Application
 {
 	// Variables

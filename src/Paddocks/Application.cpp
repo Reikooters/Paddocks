@@ -1,7 +1,16 @@
 /*************************************************************************
+ * Paddocks
+ * by Shane "Reiko" Swenson - October 2012.
+ * 
+ * Computer version of the pen and paper game, 'Paddocks' also known as
+ * 'Dots and Boxes'.
+ * 	
+ * https://github.com/Reikooters/Paddocks
+ *************************************************************************
  * Application.cpp
  *************************************************************************
- * Application class.
+ * This file contains the definitions for the functions declared in the
+ * Application class. See Application.h for details on this class.
  *************************************************************************/
 #include "Application.h"
 

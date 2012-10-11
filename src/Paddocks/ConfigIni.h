@@ -1,3 +1,4 @@
+#pragma once
 /*************************************************************************
  * Paddocks
  * by Shane "Reiko" Swenson - October 2012.
@@ -9,6 +10,7 @@
  *************************************************************************
  * ConfigIni.h
  *************************************************************************/
+
 
 /*************************************************************************
  * class ConfigIni
@@ -24,18 +26,21 @@ class ConfigIni
 	Ogre::ConfigFile configFile;
 
 	// Configurations
-	bool fullscreen;
-	Ogre::String fsaa;
-	Ogre::String width;
-	Ogre::String height;
-	int shadows;
+	struct Configurations
+	{
+		bool fullscreen;
+		Ogre::String fsaa;
+		Ogre::String width;
+		Ogre::String height;
+		int shadows;
+	} configurations;
 
 	// Functions
 	void validate();
 
 public:
 	ConfigIni(Ogre::String &filename);
-	Ogre::ConfigFile getConfig();
+	Configurations getConfig();
 
 	// Writes the config back to the file.
 	void save();
