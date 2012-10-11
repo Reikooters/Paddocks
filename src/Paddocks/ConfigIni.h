@@ -39,7 +39,10 @@ class ConfigIni
 	void validate();
 
 public:
+	// Constructor
 	ConfigIni(Ogre::String &filename);
+
+	// Returns the configuration settings.
 	Configurations getConfig();
 
 	// Writes the config back to the file.

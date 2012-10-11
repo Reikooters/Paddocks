@@ -46,13 +46,22 @@ class Application
 
 
 	// Functions
+	// Initialises Ogre
 	bool initOgre();
+
+	// Sets up the scene
 	bool createScene();
+
+	// Main program loop
 	void mainLoop();
+
+	// Loads the confuration file
 	void loadConfigIni();
 
 public:
+	// Starts the program doing it's thing.
 	int go();
 
+	// Constructor
 	Application();
 };

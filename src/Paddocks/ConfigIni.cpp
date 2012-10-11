@@ -16,7 +16,7 @@
 
 
 /*************************************************************************
- * ConfigIni::ConfigIni
+ * ConfigIni::ConfigIni()
  *************************************************************************
  * Constructor. The filename given should be the name of the config file.
  * For example, "config.ini".
@@ -28,9 +28,9 @@ ConfigIni::ConfigIni(Ogre::String &filename)
 
 
 /*************************************************************************
- * ConfigIni::getConfig
+ * ConfigIni::getConfig()
  *************************************************************************
- * Returns a copy of the Ogre::ConfigFile.
+ * Returns the configuration settings.
  *************************************************************************/
 inline ConfigIni::Configurations ConfigIni::getConfig()
 {
