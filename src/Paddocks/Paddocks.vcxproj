@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="CompileSettings.h" />
     <ClInclude Include="ConfigIni.h" />
     <ClInclude Include="PaddocksFrameListener.h" />
     <ClInclude Include="StdAfx.h" />
