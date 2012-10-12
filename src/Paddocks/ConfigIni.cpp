@@ -59,9 +59,6 @@ ConfigIni::ConfigIni(Ogre::String filename)
 		resetConfigsToDefault();
 	}
 
-	// If all is good, load the file.
-	configFile.load(filename);
-
 	// Put the settings into the 'configurations' struct.
 	grabConfigsFromConfigFile();
 
