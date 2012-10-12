@@ -35,10 +35,21 @@
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	#define WIN32_LEAN_AND_MEAN
 	#include "windows.h"
-	// Visual Leak Detector is Visual Studio-specific.
+
+	// MSVC specific headers
 	#if _MSC_VER
+		// direct.h used for chrdir()
+		#include <direct.h>
+
+		// Visual Leak Detector
 		#include <vld.h>
 	#endif
+#endif
+
+// Non-MSVC stuff
+#ifndef _MSC_VER
+	// unistd.h used for chdir() on other compilers/platforms
+	#include <unistd.h>
 #endif
 
 // Standard c++ headers

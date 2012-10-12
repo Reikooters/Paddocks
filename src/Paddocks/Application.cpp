@@ -36,6 +36,9 @@ Application::Application()
  *************************************************************************/
 int Application::go()
 {
+	// Set working directory to executable's directory
+	setCurrentWorkingDirectory();
+
 	// Load config.ini.
 	loadConfigIni();
 
@@ -73,6 +76,7 @@ bool Application::initOgre()
 	//std::auto_ptr<Ogre::Root> root(
 	//	new Ogre::Root("", "", logFilename));
 	ogrePtrs.root.reset(new Ogre::Root("", "", logFilename));
+	Ogre::LogManager::getSingleton().setLogDetail(Ogre::LL_LOW);
 
 	// STEP 2: Load plugins
 	// ------------------------------------
@@ -262,4 +266,73 @@ void Application::loadConfigIni()
 {
 	if (!configIni.get())
 		configIni.reset(new ConfigIni("config.ini"));
+}
+
+
+/****************************************************************************
+ * Application::setCurrentWorkingDirectory()
+ ****************************************************************************
+ * This function gets the IrrlichtDevice pointed to in the globals, and
+ * changes the current working directory of its FileSystem to the directory
+ * in which the executable file of the program is located.
+ ****************************************************************************/
+void Application::setCurrentWorkingDirectory()
+{
+	// TODO: Find solutions to this for other platforms
+#ifdef _MSC_VER
+	int pathLen;
+	int bufferLen = MAX_PATH;
+	DWORD lastError = 0;
+	wchar_t *pathBuffer = NULL;
+
+	do
+	{
+		// Create a buffer for the program directory
+		pathBuffer = new wchar_t[bufferLen + 1];
+		memset(pathBuffer, '\0', sizeof(wchar_t) * (bufferLen + 1));
+
+		// Put the full path + executable filename into the buffer
+		pathLen = GetModuleFileNameW(NULL, pathBuffer, bufferLen);
+
+		// Check if an error occurred
+		lastError = GetLastError();
+
+		if (lastError == ERROR_INSUFFICIENT_BUFFER)
+		{
+			// Free memory allocated for the buffer
+			delete [] pathBuffer;
+			pathBuffer = NULL;
+
+			// Double the size of the buffer
+			bufferLen *= 2;
+		}
+	}
+	// Keep trying until GetModuleFileNameW() is successful
+	while (lastError == ERROR_INSUFFICIENT_BUFFER);
+
+	if (pathBuffer)
+	{
+		/* Backtrack from the end of the buffer, truncating off one character
+		 * at a time, until the start of the filename is found, so that we are
+		 * left with only the program path */
+		for (int i = pathLen - 1; i >= 0; --i)
+		{
+			if (pathBuffer[i] == L'\\' || pathBuffer[i] == L'/')
+				break;
+			pathBuffer[i] = L'\0';
+		}
+
+		// Change working directory to point to this directory.
+#ifdef _MSC_VER
+		// Visual Studio uses _wchdir() from direct.h
+		_wchdir(pathBuffer);
+#else
+		// Other platforms use wcs_chdir() from unistd.h
+		wcs_chdir(pathBuffer);
+#endif
+
+		// Free memory allocated for the buffer
+		delete [] pathBuffer;
+	}
+#endif
 }

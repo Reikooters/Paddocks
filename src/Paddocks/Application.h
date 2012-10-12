@@ -48,6 +48,9 @@ class Application
 
 
 	// Functions
+	// Sets working directory to executable's directory
+	void setCurrentWorkingDirectory();
+
 	// Initialises Ogre
 	bool initOgre();
 
