@@ -21,7 +21,7 @@
  * Constructor. The filename given should be the name of the config file.
  * For example, "config.ini".
  *************************************************************************/
-ConfigIni::ConfigIni(Ogre::String &filename)
+ConfigIni::ConfigIni(Ogre::String filename)
 	: filename(filename)
 {
 	/* First, we will check to see whether the file can be opened.
@@ -71,17 +71,6 @@ ConfigIni::ConfigIni(Ogre::String &filename)
 
 
 /*************************************************************************
- * ConfigIni::getConfig()
- *************************************************************************
- * Returns the configuration settings.
- *************************************************************************/
-inline ConfigIni::Configurations ConfigIni::getConfigs()
-{
-	return configurations;
-}
-
-
-/*************************************************************************
  * ConfigIni::resetConfigsToDefault()
  *************************************************************************
  * Resets configurations to default.
@@ -123,9 +112,9 @@ void ConfigIni::grabConfigsFromConfigFile()
 	 * These must be added in the order they appear in the Setting
 	 * enumerator (ConfigIni.h). After this though, there is no strict
 	 * order. */
+	settings.push_back( twoStrings("fullscreen", "") );
 	settings.push_back( twoStrings("fsaa", "") );
 	settings.push_back( twoStrings("shadows", "") );
-	settings.push_back( twoStrings("fullscreen", "") );
 	settings.push_back( twoStrings("width", "") );
 	settings.push_back( twoStrings("height", "") );
 
@@ -138,9 +127,9 @@ void ConfigIni::grabConfigsFromConfigFile()
 	 * be parsed correctly. eg. if a true/false value is set to 'blah',
 	 * then the setting will be set to default and the value retrieved
 	 * from the file will be ignored. */
+	configurations.fullscreen = Ogre::StringConverter::parseBool(settings[SETTING_FULLSCREEN].second, CONFIG_DEFAULT_FULLSCREEN);
 	configurations.fsaa = Ogre::StringConverter::parseInt(settings[SETTING_FSAA].second, CONFIG_DEFAULT_FSAA);
 	configurations.shadows = Ogre::StringConverter::parseInt(settings[SETTING_SHADOWS].second, CONFIG_DEFAULT_SHADOWS);
-	configurations.fullscreen = Ogre::StringConverter::parseBool(settings[SETTING_FULLSCREEN].second, CONFIG_DEFAULT_FULLSCREEN);
 	configurations.width = Ogre::StringConverter::parseInt(settings[SETTING_WIDTH].second, CONFIG_DEFAULT_WIDTH);
 	configurations.height = Ogre::StringConverter::parseInt(settings[SETTING_HEIGHT].second, CONFIG_DEFAULT_HEIGHT);
 
@@ -164,7 +153,7 @@ void ConfigIni::grabConfigsFromConfigFile()
 	}
 
 	// Shadows
-	switch (configurations.fsaa)
+	switch (configurations.shadows)
 	{
 	case 0:
 	case 1:
@@ -198,10 +187,27 @@ void ConfigIni::save()
 	 * nothing. */
 	if (file.is_open())
 	{
+		// Full Screen
+		file << "fullscreen=";
+		if (configurations.fullscreen)
+			file << "true";
+		else
+			file << "false";
+		file << std::endl;
+
 		// Anti-aliasing
 		file << "fsaa=" << configurations.fsaa << std::endl;
 
-		// Close the file.
+		// Shadows
+		file << "shadows=" << configurations.shadows << std::endl;
+		
+		// Width
+		file << "width=" << configurations.width << std::endl;
+
+		// Height
+		file << "height=" << configurations.height << std::endl;
+
+		// Done writing, so close the file.
 		file.close();
 	}
 }
