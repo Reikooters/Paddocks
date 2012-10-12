@@ -11,6 +11,7 @@
  * Application.h
  *************************************************************************/
 #include "PaddocksFrameListener.h"
+#include "ConfigIni.h"
 
 
 /*************************************************************************
@@ -22,6 +23,7 @@ class Application
 {
 	// Variables
 	std::auto_ptr<PaddocksFrameListener> frameListener;
+	std::auto_ptr<ConfigIni> configIni;
 
 	struct OgrePtrs
 	{

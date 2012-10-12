@@ -146,30 +146,28 @@ bool Application::initOgre()
 	// STEP 5: Create the render window
 	// ------------------------------------
 	{
-		// First we configure the window we are going to create.
+		/* First we configure the window we are going to create.
+		 * We pull the settings out from what was loaded from the
+		 * config.ini, if it was loaded already. */
+		ConfigIni::Configurations configs;
+		if (configIni.get())
+			configs = configIni->getConfigs();
 
 		// Set the window title.
 		Ogre::String windowTitle = "Paddocks";
-
-		// Window size.
-		unsigned int width = 800;
-		unsigned int height = 600;
-
-		// Use windowed mode
-		bool fullscreen = false; 
 
 		// Set some parameters.
 		Ogre::NameValuePairList params;
 
 		// Full screen anti-aliasing.
-		params["FSAA"] = "0";
+		params["FSAA"] = Ogre::StringConverter::toString(configs.fsaa);
 
 		/* vertical synchronisation will prevent image tearing, but
 		 * also will provide smooth framerate in windowed mode. */
 		params["vsync"] = "true";
 
-		// Create the render window
-		ogrePtrs.window = ogrePtrs.root->createRenderWindow(windowTitle, width, height, fullscreen, &params);
+		// Create the render window, using our configurations.
+		ogrePtrs.window = ogrePtrs.root->createRenderWindow(windowTitle, configs.width, configs.height, configs.fullscreen, &params);
 	}
 
 	// STEP 6: Assign the frame listener
@@ -262,18 +260,6 @@ bool Application::createScene()
  *************************************************************************/
 void Application::loadConfigIni()
 {
-	Ogre::ConfigFile *config = new Ogre::ConfigFile();
-	config->load("config.ini");
-
-	Ogre::String fullscreen = config->getSetting("fullscreen", Ogre::StringUtil::BLANK, "false");
-	MessageBoxA(NULL, fullscreen.c_str(), "Full Screen", 0);
-
-	Ogre::String fsaa = config->getSetting("fsaa", Ogre::StringUtil::BLANK, "0");
-	MessageBoxA(NULL, fsaa.c_str(), "FSAA", 0);
-
-	Ogre::String width = config->getSetting("width", Ogre::StringUtil::BLANK, "800");
-	MessageBoxA(NULL, width.c_str(), "Width", 0);
-
-	Ogre::String height = config->getSetting("height", Ogre::StringUtil::BLANK, "600");
-	MessageBoxA(NULL, height.c_str(), "Height", 0);
+	if (!configIni.get())
+		configIni.reset(new ConfigIni("config.ini"));
 }
