@@ -81,8 +81,7 @@ inline void ConfigIni::resetConfigsToDefault()
 	configurations.fsaa =			CONFIG_DEFAULT_FSAA;
 	configurations.shadows =		CONFIG_DEFAULT_SHADOWS;
 	configurations.fullscreen =		CONFIG_DEFAULT_FULLSCREEN;
-	configurations.height =			CONFIG_DEFAULT_HEIGHT;
-	configurations.width =			CONFIG_DEFAULT_WIDTH;
+	configurations.resolution =		Ogre::Vector2(CONFIG_DEFAULT_WIDTH, CONFIG_DEFAULT_HEIGHT);
 }
 
 
@@ -115,8 +114,7 @@ void ConfigIni::grabConfigsFromConfigFile()
 	settings.push_back( twoStrings("fullscreen", "") );
 	settings.push_back( twoStrings("fsaa", "") );
 	settings.push_back( twoStrings("shadows", "") );
-	settings.push_back( twoStrings("width", "") );
-	settings.push_back( twoStrings("height", "") );
+	settings.push_back( twoStrings("resolution", "") );
 
 	/* Pull all the values out and put them into the vector's second
 	 * strings. */
@@ -127,11 +125,10 @@ void ConfigIni::grabConfigsFromConfigFile()
 	 * be parsed correctly. eg. if a true/false value is set to 'blah',
 	 * then the setting will be set to default and the value retrieved
 	 * from the file will be ignored. */
-	configurations.fullscreen = Ogre::StringConverter::parseBool(settings[SETTING_FULLSCREEN].second, CONFIG_DEFAULT_FULLSCREEN);
-	configurations.fsaa = Ogre::StringConverter::parseInt(settings[SETTING_FSAA].second, CONFIG_DEFAULT_FSAA);
-	configurations.shadows = Ogre::StringConverter::parseInt(settings[SETTING_SHADOWS].second, CONFIG_DEFAULT_SHADOWS);
-	configurations.width = Ogre::StringConverter::parseInt(settings[SETTING_WIDTH].second, CONFIG_DEFAULT_WIDTH);
-	configurations.height = Ogre::StringConverter::parseInt(settings[SETTING_HEIGHT].second, CONFIG_DEFAULT_HEIGHT);
+	setSetting(SETTING_FULLSCREEN, settings[SETTING_FULLSCREEN].second);
+	setSetting(SETTING_FSAA, settings[SETTING_FSAA].second);
+	setSetting(SETTING_SHADOWS, settings[SETTING_SHADOWS].second);
+	setSetting(SETTING_RESOLUTION, settings[SETTING_RESOLUTION].second);
 
 	/* Now we check that each setting is valid. For example, lets say a
 	 * setting that uses an integer value has valid values of 0, 1 or 2.
@@ -140,35 +137,6 @@ void ConfigIni::grabConfigsFromConfigFile()
 	 * checked, as enough validation would have been done for them above
 	 * already, since there are exactly two possible values always. */
 
-	// Anti-aliasing
-	switch (configurations.fsaa)
-	{
-	case 0:
-	case 2:
-	case 4:
-	case 8:
-		break;
-	default:
-		configurations.fsaa = CONFIG_DEFAULT_FSAA;
-	}
-
-	// Shadows
-	switch (configurations.shadows)
-	{
-	case 0:
-	case 1:
-	case 2:
-		break;
-	default:
-		configurations.shadows = CONFIG_DEFAULT_SHADOWS;
-	}
-
-	// TODO: Proper Width validation.
-	if (configurations.width < 800 || configurations.width > 1920)
-		configurations.width = CONFIG_DEFAULT_WIDTH;
-
-	if (configurations.height < 600 || configurations.height > 1080)
-		configurations.height = CONFIG_DEFAULT_HEIGHT;
 }
 
 
@@ -201,13 +169,91 @@ void ConfigIni::save()
 		// Shadows
 		file << "shadows=" << configurations.shadows << std::endl;
 		
-		// Width
-		file << "width=" << configurations.width << std::endl;
-
-		// Height
-		file << "height=" << configurations.height << std::endl;
+		// Resolution
+		file << "resolution=" << configurations.resolution.x << " " <<
+			configurations.resolution.y << std::endl;
 
 		// Done writing, so close the file.
 		file.close();
+	}
+}
+
+/*************************************************************************
+ * ConfigIni::setSetting()
+ *************************************************************************
+ * Public function for changing the stored settings. If the new value
+ * for the given setting is invalid, the setting will be returned to its
+ * default value.
+ *
+ * For each setting:
+ *
+ * Step 1:
+ * Parse each setting. Setting will be set to default if it cannot
+ * be parsed correctly. eg. if a true/false value is set to 'blah',
+ * then the setting will be set to default and the value retrieved
+ * from the file will be ignored.
+ *
+ * Step 2:
+ * Check that each setting is valid. For example, lets say a setting that
+ * uses an integer value has valid values of 0, 1 or 2. If the value
+ * obtained from the file was 91234, then the default value should be
+ * used instead. True/false values don't need to be checked, as enough
+ * validation would have been done for them above already, since there
+ * are exactly two possible values always.
+ *
+ * Note: save() should be called afterward to write the changes back
+ * to the file.
+ *************************************************************************/
+void ConfigIni::setSetting(Setting setting, Ogre::String newValue)
+{
+	if (setting >= 0 && setting < SETTINGS_TOTAL)
+	{
+		switch (setting)
+		{
+		// Full Screen
+		case SETTING_FULLSCREEN:
+			configurations.fullscreen = Ogre::StringConverter::parseBool(newValue, CONFIG_DEFAULT_FULLSCREEN);
+			break;
+
+		// Anti-aliasing
+		case SETTING_FSAA:
+			configurations.fsaa = Ogre::StringConverter::parseInt(newValue, CONFIG_DEFAULT_FSAA);
+
+			// Validate
+			switch (configurations.fsaa)
+			{
+			case 0:
+			case 2:
+			case 4:
+			case 8:
+				break;
+			default:
+				configurations.fsaa = CONFIG_DEFAULT_FSAA;
+			}
+			break;
+
+		// Shadows
+		case SETTING_SHADOWS:
+			configurations.shadows = Ogre::StringConverter::parseInt(newValue, CONFIG_DEFAULT_SHADOWS);
+
+			// Validate
+			switch (configurations.shadows)
+			{
+			case 0:
+			case 1:
+			case 2:
+				break;
+			default:
+				configurations.shadows = CONFIG_DEFAULT_SHADOWS;
+			}
+			break;
+
+		// Resolution
+		case SETTING_RESOLUTION:
+			configurations.resolution = Ogre::StringConverter::parseVector2(newValue, Ogre::Vector2(CONFIG_DEFAULT_WIDTH, CONFIG_DEFAULT_HEIGHT));
+
+			// TODO: Resolution validation.
+			break;
+		}
 	}
 }

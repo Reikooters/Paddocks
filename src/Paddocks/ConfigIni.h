@@ -29,13 +29,12 @@ public:
 		bool fullscreen;
 		int fsaa;
 		int shadows;
-		int width;
-		int height;
+		Ogre::Vector2 resolution;
 
 		Configurations()
 			: fullscreen(CONFIG_DEFAULT_FULLSCREEN), fsaa(CONFIG_DEFAULT_FSAA),
-			shadows(CONFIG_DEFAULT_SHADOWS), width(CONFIG_DEFAULT_WIDTH),
-			height(CONFIG_DEFAULT_HEIGHT)
+			shadows(CONFIG_DEFAULT_SHADOWS),
+			resolution(CONFIG_DEFAULT_WIDTH, CONFIG_DEFAULT_HEIGHT)
 		{ }
 	};
 
@@ -45,8 +44,7 @@ public:
 		SETTING_FULLSCREEN,
 		SETTING_FSAA,
 		SETTING_SHADOWS,
-		SETTING_WIDTH,
-		SETTING_HEIGHT,
+		SETTING_RESOLUTION,
 
 		SETTINGS_TOTAL // must always be last
 	};
@@ -70,7 +68,9 @@ public:
 	// Returns the configuration settings.
 	Configurations getConfigs();
 
-	// Change a setting
+	/* Change a setting.
+	 * If the given value is invalid for the setting, the setting will
+	 * be reset to default. */
 	void setSetting(Setting setting, Ogre::String newValue);
 
 	// Writes the config back to the file.

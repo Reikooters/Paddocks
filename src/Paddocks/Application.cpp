@@ -167,7 +167,7 @@ bool Application::initOgre()
 		params["vsync"] = "true";
 
 		// Create the render window, using our configurations.
-		ogrePtrs.window = ogrePtrs.root->createRenderWindow(windowTitle, configs.width, configs.height, configs.fullscreen, &params);
+		ogrePtrs.window = ogrePtrs.root->createRenderWindow(windowTitle, (unsigned int)configs.resolution.x, (unsigned int)configs.resolution.y, configs.fullscreen, &params);
 	}
 
 	// STEP 6: Assign the frame listener
