@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{7761b5fa-06bf-4d0a-96b1-49ba49ab7c64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\Elements">
+      <UniqueIdentifier>{8a4979fc-c136-4af2-81c2-5a9f3546f6f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\Canvas">
+      <UniqueIdentifier>{bc2c9407-aeeb-4486-8ac7-c076214ac72e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -29,6 +38,30 @@
     </ClCompile>
     <ClCompile Include="ConfigIni.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GUICanvas.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GUIBox.cpp">
+      <Filter>GUI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GUIButton.cpp">
+      <Filter>GUI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GUILabel.cpp">
+      <Filter>GUI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GUITextBox.cpp">
+      <Filter>GUI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GUITextList.cpp">
+      <Filter>GUI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Atlas.cpp">
+      <Filter>GUI\Canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Canvas.cpp">
+      <Filter>GUI\Canvas</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -47,5 +80,40 @@
     <ClInclude Include="CompileSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GUI\GUICanvas.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUIDelegate.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUIBox.h">
+      <Filter>GUI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUIButton.h">
+      <Filter>GUI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUILabel.h">
+      <Filter>GUI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUITextBox.h">
+      <Filter>GUI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUITextList.h">
+      <Filter>GUI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Atlas.h">
+      <Filter>GUI\Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Canvas.h">
+      <Filter>GUI\Canvas</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GUI\README.txt">
+      <Filter>GUI</Filter>
+    </None>
+    <None Include="GUI\LICENSE.txt">
+      <Filter>GUI</Filter>
+    </None>
   </ItemGroup>
 </Project>
