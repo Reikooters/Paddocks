@@ -22,6 +22,9 @@
     <Filter Include="GUI\Canvas">
       <UniqueIdentifier>{bc2c9407-aeeb-4486-8ac7-c076214ac72e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="States">
+      <UniqueIdentifier>{a0b4f37e-90a7-4745-95e3-64a9e6ee85f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -106,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="GUI\Canvas.h">
       <Filter>GUI\Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
