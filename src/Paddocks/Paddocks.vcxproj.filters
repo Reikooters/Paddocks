@@ -25,6 +25,9 @@
     <Filter Include="States">
       <UniqueIdentifier>{a0b4f37e-90a7-4745-95e3-64a9e6ee85f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="States\MainMenu">
+      <UniqueIdentifier>{21b80cc6-6bc6-4775-8f85-0d9abc5b4f58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -65,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="GUI\Canvas.cpp">
       <Filter>GUI\Canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuState.cpp">
+      <Filter>States\MainMenu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +118,12 @@
     </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuState.h">
+      <Filter>States\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Structs.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -59,3 +59,4 @@
 
 // Paddocks headers
 #include "CompileSettings.h"
+#include "Structs.h"

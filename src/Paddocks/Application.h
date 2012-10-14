@@ -13,6 +13,9 @@
 #include "PaddocksFrameListener.h"
 #include "ConfigIni.h"
 
+// Forward declaration
+class GameState;
+
 
 /*************************************************************************
  * class Application.
@@ -22,32 +25,33 @@
 class Application
 {
 	// Variables
+	// -------------------------------------------------------------
 	std::auto_ptr<PaddocksFrameListener> frameListener;
 	std::auto_ptr<ConfigIni> configIni;
 
-	struct OgrePtrs
-	{
-		/* We use an auto_ptr for the Ogre Root so that it will always
-		 * be cleaned up automatically. */
-		std::auto_ptr<Ogre::Root> root;
+	Ogre::Timer timer;
+	unsigned long lastTime;
 
-		/* The memory pointed to by these pointers will be cleaned up by
-		 * the Ogre Root and shouldn't be deleted manually. */
-		Ogre::RenderWindow *window;
-		Ogre::SceneManager *sceneManager;
-		Ogre::SceneNode *rootSceneNode;
-		Ogre::Camera *camera;
-		Ogre::Viewport *viewport;
+	/* We use an auto_ptr for the Ogre Root so that it will always
+	 * be cleaned up automatically. */
+	std::auto_ptr<Ogre::Root> ogreRoot;
 
-		// Initialise pointers
-		OgrePtrs()
-			: window(NULL), sceneManager(NULL), rootSceneNode(NULL),
-			camera(NULL), viewport(NULL)
-		{ }
-	} ogrePtrs;
+	// Struct used to store pointers to Ogre things
+	OgrePtrs ogrePtrs;
+
+	// The current state
+	GameState* activeState;
+
+	// The stack of pending states
+	std::vector<GameState*> states;
+
+	/* Whether or not the game is running. Setting this to false will
+	 * exit the game. */
+	bool running;
 
 
 	// Functions
+	// -------------------------------------------------------------
 	// Sets working directory to executable's directory
 	void setCurrentWorkingDirectory();
 

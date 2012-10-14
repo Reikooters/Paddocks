@@ -13,6 +13,7 @@
  * Application class. See Application.h for details on this class.
  *************************************************************************/
 #include "Application.h"
+#include "MainMenuState.h"
 
 
 /*************************************************************************
@@ -21,6 +22,7 @@
  * Constructor. Initialises variables.
  *************************************************************************/
 Application::Application()
+	: lastTime(timer.getMilliseconds()), running(true)
 {
 	frameListener.reset(new PaddocksFrameListener());
 }
@@ -45,6 +47,13 @@ int Application::go()
 	// Initialise Ogre.
 	if (!initOgre())
 		return EXIT_FAILURE;
+
+	createScene();
+
+	states.push_back(new MainMenuState(ogrePtrs));
+
+	activeState = states.back();
+	activeState->enter();
 
 	// Start main program loop.
 	mainLoop();
@@ -73,9 +82,8 @@ bool Application::initOgre()
 	/* Create the Ogre Root, telling it the log filename we want to use.
 	 * We aren't loading the plugin list or config from file, so these
 	 * are left blank. */
-	//std::auto_ptr<Ogre::Root> root(
-	//	new Ogre::Root("", "", logFilename));
-	ogrePtrs.root.reset(new Ogre::Root("", "", logFilename));
+	ogreRoot.reset(new Ogre::Root("", "", logFilename));
+	ogrePtrs.root = ogreRoot.get();
 	Ogre::LogManager::getSingleton().setLogDetail(Ogre::LL_LOW);
 
 	// STEP 2: Load plugins
@@ -144,7 +152,8 @@ bool Application::initOgre()
 		// Custom capabilities of the RenderSystem.
 		Ogre::String customCapabilities = "";
 
-		ogrePtrs.root->initialise(createAWindowAutomatically, windowTitle, customCapabilities);
+		//ogrePtrs.root->initialise(createAWindowAutomatically, windowTitle, customCapabilities);
+		ogrePtrs.root->initialise(createAWindowAutomatically, windowTitle);
 	}
 
 	// STEP 5: Create the render window
@@ -198,19 +207,46 @@ void Application::mainLoop()
 	// Main program loop.
 	while (true)
 	{
-		/* We call messagePump() to let the messages between the application
-		 * and the OS go through. For example, moving the window, closing
-		 * the window, etc. If we don't call this then the user won't be
-		 * able to click or use the window at all. */
-		Ogre::WindowEventUtilities::messagePump();
+		Ogre::Real deltaTime = (timer.getMilliseconds()-lastTime)/1000.0f;
+		lastTime = timer.getMilliseconds();
 
-		// Stop rendering when the window is closed.
-		if (ogrePtrs.window->isClosed())
-			return;
+		if (activeState)
+		{
+			activeState->update(deltaTime);
 
-		// Or when renderOneFrame() returns false.
-		if (!ogrePtrs.root->renderOneFrame())
-			return;
+			/* We call messagePump() to let the messages between the application
+			 * and the OS go through. For example, moving the window, closing
+			 * the window, etc. If we don't call this then the user won't be
+			 * able to click or use the window at all. */
+			Ogre::WindowEventUtilities::messagePump();
+
+			/* Check if the window is closed. If it is, we stop the program
+			 * running. */
+			if (ogrePtrs.window->isClosed())
+				running = false;
+
+			// If window isn't closed, render a frame
+			if (running)
+				running = ogrePtrs.root->renderOneFrame();
+
+			/* If the program is stopping, clean up GameStates and exit. */
+			if (!running)
+			{
+				// Exit the active state
+				activeState->exit();
+
+				// Delete all GameStates
+				while (states.size() > 0)
+				{
+					delete activeState;
+					states.pop_back();
+
+					if (states.size() > 0)
+						activeState = states.back();
+				}
+				return;
+			}
+		}
 	}
 }
 
@@ -223,7 +259,7 @@ void Application::mainLoop()
 bool Application::createScene()
 {
 	// Don't create the scene if the root hasn't been created.
-	if (!ogrePtrs.root.get())
+	if (!ogrePtrs.root)
 		return false;
 
 	// If the scene has already been created, don't create it again.
@@ -247,7 +283,7 @@ bool Application::createScene()
 	ogrePtrs.viewport = ogrePtrs.window->addViewport(ogrePtrs.camera);
 
 	// Set the drawing background colour.
-	ogrePtrs.viewport->setBackgroundColour(Ogre::ColourValue(1.0f, 0.0f, 1.0f));
+	ogrePtrs.viewport->setBackgroundColour(Ogre::ColourValue(0.0f, 1.0f, 0.0f));
 
 	// Alter the camera aspect ratio to match the viewport
 	ogrePtrs.camera->setAspectRatio(
