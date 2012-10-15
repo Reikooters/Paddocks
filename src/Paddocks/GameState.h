@@ -22,6 +22,6 @@ class GameState
 public:
 	virtual ~GameState() {}
 	virtual void enter() = 0;
-	virtual void update(Ogre::Real deltaTimeSecs) = 0;
+	virtual void update(const Ogre::Real deltaTimeSecs) = 0;
 	virtual void exit() = 0;
 };

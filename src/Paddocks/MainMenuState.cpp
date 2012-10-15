@@ -32,7 +32,7 @@ void MainMenuState::enter()
 }
 
 
-void MainMenuState::update(Ogre::Real deltaTimeSecs)
+void MainMenuState::update(const Ogre::Real deltaTimeSecs)
 {
 	guiCanvas->update();
 }

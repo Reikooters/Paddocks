@@ -35,6 +35,6 @@ public:
 	MainMenuState(OgrePtrs &ogrePtrs);
 
 	void enter();
-	void update(Ogre::Real deltaTimeSecs);
+	void update(const Ogre::Real deltaTimeSecs);
 	void exit();
 };

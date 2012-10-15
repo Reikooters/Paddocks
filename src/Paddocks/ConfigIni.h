@@ -63,18 +63,18 @@ private:
 
 public:
 	// Constructor
-	ConfigIni(Ogre::String filename);
+	ConfigIni(const Ogre::String &filename);
 
 	// Returns the configuration settings.
-	Configurations getConfigs();
+	Configurations getConfigs() const;
 
 	/* Change a setting.
 	 * If the given value is invalid for the setting, the setting will
 	 * be reset to default. */
-	void setSetting(Setting setting, Ogre::String newValue);
+	void setSetting(const Setting setting, const Ogre::String &newValue);
 
 	// Writes the config back to the file.
-	void save();
+	void save() const;
 };
 
 
@@ -83,7 +83,7 @@ public:
  *************************************************************************
  * Returns the configuration settings.
  *************************************************************************/
-inline ConfigIni::Configurations ConfigIni::getConfigs()
+inline ConfigIni::Configurations ConfigIni::getConfigs() const
 {
 	return configurations;
 }

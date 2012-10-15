@@ -21,7 +21,7 @@
  * Constructor. The filename given should be the name of the config file.
  * For example, "config.ini".
  *************************************************************************/
-ConfigIni::ConfigIni(Ogre::String filename)
+ConfigIni::ConfigIni(const Ogre::String &filename)
 	: filename(filename)
 {
 	/* First, we will check to see whether the file can be opened.
@@ -143,7 +143,7 @@ void ConfigIni::grabConfigsFromConfigFile()
  * Overwrites the loaded config file with the settings that are currently
  * in memory.
  *************************************************************************/
-void ConfigIni::save()
+void ConfigIni::save() const
 {
 	// Open file for writing.
 	std::ofstream file(filename);
@@ -201,7 +201,7 @@ void ConfigIni::save()
  * Note: save() should be called afterward to write the changes back
  * to the file.
  *************************************************************************/
-void ConfigIni::setSetting(Setting setting, Ogre::String newValue)
+void ConfigIni::setSetting(const Setting setting, const Ogre::String &newValue)
 {
 	if (setting >= 0 && setting < SETTINGS_TOTAL)
 	{

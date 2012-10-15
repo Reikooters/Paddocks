@@ -321,7 +321,7 @@ void Application::loadConfigIni()
  * changes the current working directory of its FileSystem to the directory
  * in which the executable file of the program is located.
  ****************************************************************************/
-void Application::setCurrentWorkingDirectory()
+void Application::setCurrentWorkingDirectory() const
 {
 	// TODO: Find solutions to this for other platforms
 #ifdef _MSC_VER
