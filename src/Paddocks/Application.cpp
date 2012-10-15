@@ -190,6 +190,9 @@ bool Application::initOgre()
 		 * also will provide smooth framerate in windowed mode. */
 		params["vsync"] = "true";
 
+		// Make window non-resiable
+		params["border"] = "fixed";
+
 		// Create the render window, using our configurations.
 		ogrePtrs.window = ogrePtrs.root->createRenderWindow(windowTitle, (unsigned int)configs.resolution.x, (unsigned int)configs.resolution.y, configs.fullscreen, &params);
 	}
