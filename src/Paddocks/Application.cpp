@@ -382,7 +382,9 @@ void Application::setCurrentWorkingDirectory()
 /*************************************************************************
  * Application::cleanupGameStates()
  *************************************************************************
- * Cleans up (deletes) all GameStates.
+ * Cleans up (deletes) all GameStates. Note that this function does not
+ * call the current state's exit() function before deleting them all,
+ * so that should be called first before this function if it is required.
  *************************************************************************/
 void Application::cleanupGameStates()
 {
