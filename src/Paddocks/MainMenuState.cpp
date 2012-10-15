@@ -7,7 +7,7 @@
  * 	
  * https://github.com/Reikooters/Paddocks
  *************************************************************************
- * MainMenuState.h
+ * MainMenuState.cpp
  *************************************************************************/
 #include "MainMenuState.h"
 #include "GUITextBox.h"
