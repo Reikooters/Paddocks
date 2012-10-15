@@ -50,6 +50,7 @@
       <AdditionalOptions>-Zm137 %(AdditionalOptions)</AdditionalOptions>
       <EnablePREfast>true</EnablePREfast>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>_DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -88,6 +89,7 @@
     <ClCompile Include="GUI\GUILabel.cpp" />
     <ClCompile Include="GUI\GUITextBox.cpp" />
     <ClCompile Include="GUI\GUITextList.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="PaddocksFrameListener.cpp" />
@@ -110,6 +112,7 @@
     <ClInclude Include="GUI\GUILabel.h" />
     <ClInclude Include="GUI\GUITextBox.h" />
     <ClInclude Include="GUI\GUITextList.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="PaddocksFrameListener.h" />
     <ClInclude Include="StdAfx.h" />

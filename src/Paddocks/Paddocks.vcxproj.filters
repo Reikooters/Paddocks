@@ -28,6 +28,9 @@
     <Filter Include="States\MainMenu">
       <UniqueIdentifier>{21b80cc6-6bc6-4775-8f85-0d9abc5b4f58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{6e6b0824-4933-4c3a-8d5c-6675cd4a75f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -71,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="MainMenuState.cpp">
       <Filter>States\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="Structs.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
