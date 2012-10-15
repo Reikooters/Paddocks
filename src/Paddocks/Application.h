@@ -67,10 +67,14 @@ class Application
 	// Loads the confuration file
 	void loadConfigIni();
 
+	// Cleans up GameStates
+	void cleanupGameStates();
+
 public:
 	// Starts the program doing it's thing.
 	int go();
 
-	// Constructor
+	// Constructor + Destructor
 	Application();
+	~Application();
 };

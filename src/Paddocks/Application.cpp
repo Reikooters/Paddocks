@@ -29,6 +29,17 @@ Application::Application()
 
 
 /*************************************************************************
+ * Application::~Application()
+ *************************************************************************
+ * Destructor. Performs cleanup.
+ *************************************************************************/
+Application::~Application()
+{
+	cleanupGameStates();
+}
+
+
+/*************************************************************************
  * Application::go()
  *************************************************************************
  * This function starts the program doing it's thing.
@@ -235,15 +246,9 @@ void Application::mainLoop()
 				// Exit the active state
 				activeState->exit();
 
-				// Delete all GameStates
-				while (states.size() > 0)
-				{
-					delete activeState;
-					states.pop_back();
+				// Clean up GameStates
+				cleanupGameStates();
 
-					if (states.size() > 0)
-						activeState = states.back();
-				}
 				return;
 			}
 		}
@@ -371,4 +376,22 @@ void Application::setCurrentWorkingDirectory()
 		delete [] pathBuffer;
 	}
 #endif
+}
+
+
+/*************************************************************************
+ * Application::cleanupGameStates()
+ *************************************************************************
+ * Cleans up (deletes) all GameStates.
+ *************************************************************************/
+void Application::cleanupGameStates()
+{
+	// Delete all GameStates
+	while (states.size() > 0)
+	{
+		activeState = states.back();
+		delete activeState;
+		states.pop_back();
+	}
+	activeState = NULL;
 }
