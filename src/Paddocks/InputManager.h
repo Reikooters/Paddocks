@@ -18,7 +18,7 @@
  *************************************************************************/
 #include <OIS\OISMouse.h>
 #include <OIS\OISKeyboard.h>
-#include <OIS\OISJoyStick.h>
+//#include <OIS\OISJoyStick.h>
 #include <OIS\OISInputManager.h>
 
 
