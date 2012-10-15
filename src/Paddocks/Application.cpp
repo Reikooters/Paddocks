@@ -61,8 +61,14 @@ int Application::go()
 
 	createScene();
 
-	states.push_back(new MainMenuState(ogrePtrs));
+	// Create the Input Manager
+	inputManager.reset(InputManager::getSingletonPtr());
+	inputManager->initialise(ogrePtrs.window);
 
+	// Create the Main Menu game state
+	states.push_back(new MainMenuState(ogrePtrs, inputManager.get()));
+
+	// Set it as the active state
 	activeState = states.back();
 	activeState->enter();
 
@@ -234,6 +240,9 @@ void Application::mainLoop()
 			 * the window, etc. If we don't call this then the user won't be
 			 * able to click or use the window at all. */
 			Ogre::WindowEventUtilities::messagePump();
+
+			// Capture input
+			InputManager::getSingletonPtr()->capture();
 
 			/* Check if the window is closed. If it is, we stop the program
 			 * running. */

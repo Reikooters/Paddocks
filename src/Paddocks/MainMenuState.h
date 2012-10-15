@@ -13,6 +13,9 @@
 #include "GameState.h"
 #include "GUICanvas.h"
 
+// Forward declaration
+class InputManager;
+
 
 /*************************************************************************
  * class MainMenuState
@@ -23,16 +26,30 @@
  *************************************************************************/
 class MainMenuState : public GameState
 {
+	// Variables
+	// -------------------------------------------------------------
 	// Ogre pointers
 	OgrePtrs ogrePtrs;
+	InputManager *inputManager;
 
 	// GUI
 	std::auto_ptr<GUICanvas> guiCanvas;
 
+	// Functions
+	// -------------------------------------------------------------
 	void createGUI();
+	void startGameClicked();
+
+	// Functions inherited from GameState
+	bool mouseMoved(const OIS::MouseEvent &arg);
+	bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+	bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+	bool keyPressed(const OIS::KeyEvent &arg);
+	bool keyReleased(const OIS::KeyEvent &arg);
+	void windowResized(int width, int height);
 
 public:
-	MainMenuState(OgrePtrs &ogrePtrs);
+	MainMenuState(OgrePtrs &ogrePtrs, InputManager *inputManager);
 
 	void enter();
 	void update(const Ogre::Real deltaTimeSecs);

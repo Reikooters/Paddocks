@@ -61,3 +61,12 @@ void Box::flagDirty()
 	if(container)
 		container->setDirty();
 }
+
+// Added by Reiko
+bool Box::onMouseDown(int x, int y)
+{
+	if (isMouseOver)
+		fireEvent("click");
+
+	return true;
+}

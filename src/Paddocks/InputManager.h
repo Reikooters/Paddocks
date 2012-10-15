@@ -31,12 +31,12 @@ class InputManager : public OIS::KeyListener, public OIS::MouseListener//, publi
 {
 	InputManager();
 	InputManager(const InputManager&) { }
-	InputManager &operator= (const InputManager&);
+	InputManager &operator=(const InputManager&);
 
 	bool keyPressed(const OIS::KeyEvent &e);
 	bool keyReleased(const OIS::KeyEvent &e);
 
-	bool mouseMoved(const OIS::MouseEvent &e );
+	bool mouseMoved(const OIS::MouseEvent &e);
 	bool mousePressed(const OIS::MouseEvent &e, OIS::MouseButtonID id);
 	bool mouseReleased(const OIS::MouseEvent &e, OIS::MouseButtonID id);
 

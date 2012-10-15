@@ -20,7 +20,8 @@ public:
 	virtual void setContainer(GUICanvas* container);
 	virtual void draw(Canvas* canvas, Atlas* atlas);
 	virtual void getBounds(int& left, int& top, int& right, int& bottom);
-	virtual bool onMouseDown(int x, int y) { return false; }
+	//virtual bool onMouseDown(int x, int y) { return false; }
+	virtual bool onMouseDown(int x, int y);
 	virtual bool onMouseUp(int x, int y) { return false; }
 	virtual bool onMouseOver() { return false; }
 	virtual bool onMouseOut() { return false; }

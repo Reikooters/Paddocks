@@ -12,6 +12,7 @@
  *************************************************************************/
 #include "PaddocksFrameListener.h"
 #include "ConfigIni.h"
+#include "InputManager.h"
 
 // Forward declaration
 class GameState;
@@ -28,6 +29,7 @@ class Application
 	// -------------------------------------------------------------
 	std::auto_ptr<PaddocksFrameListener> frameListener;
 	std::auto_ptr<ConfigIni> configIni;
+	std::auto_ptr<InputManager> inputManager;
 
 	Ogre::Timer timer;
 	unsigned long lastTime;
