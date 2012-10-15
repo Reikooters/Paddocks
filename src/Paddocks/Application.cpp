@@ -226,6 +226,7 @@ void Application::mainLoop()
 
 		if (activeState)
 		{
+			// Tell the active state to update
 			activeState->update(deltaTime);
 
 			/* We call messagePump() to let the messages between the application

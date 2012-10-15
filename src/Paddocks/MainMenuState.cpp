@@ -49,9 +49,10 @@ void MainMenuState::createGUI()
 	std::vector<FontFaceDefinition> fontList;
 
 	std::vector<Ogre::String> texList;
-	texList.push_back("menu-1.png");
-	texList.push_back("menu-2.png");
-	texList.push_back("menu-3.png");
+	texList.push_back("main_menu-start_game.png");
+	texList.push_back("main_menu-how_to_play.png");
+	texList.push_back("main_menu-options.png");
+	texList.push_back("main_menu-exit_game.png");
 
 	Ogre::ResourceGroupManager *resGrp = Ogre::ResourceGroupManager::getSingletonPtr();
 	Ogre::String resourceDirectory = "data";
@@ -64,36 +65,45 @@ void MainMenuState::createGUI()
 	/*
 	GUIElements::Box* fullscreenMatte = new GUIElements::Box(ogrePtrs.camera->getViewport()->getActualWidth(), 
 		ogrePtrs.camera->getViewport()->getActualHeight());
-	fullscreenMatte->setPosition(Position(BottomRight));
+	fullscreenMatte->setPosition(Position(Center));
 	fullscreenMatte->setBackground(Fill(parseHexColor("#00050a"), parseHexColor("#06182c")));
 	*/
 
-	GUIElements::Box* optionsButton = NULL;
+	GUIElements::Box* startGameButton = NULL;
 	GUIElements::Box* howToPlayButton = NULL;
+	GUIElements::Box* optionsButton = NULL;
 	GUIElements::Box* exitGameButton = NULL;
 
 	try
 	{
-		optionsButton = new GUIElements::Box(406, 66);
-		optionsButton->setPosition(Position(RelativePosition(BottomLeft), 30, -222));
-		optionsButton->setBackground(Fill("menu-1.png"));
+		startGameButton = new GUIElements::Box(400, 66);
+		startGameButton->setPosition(Position(RelativePosition(BottomLeft), 30, -288));
+		startGameButton->setBackground(Fill("main_menu-start_game.png"));
 
-		howToPlayButton = new GUIElements::Box(406, 66);
-		howToPlayButton->setPosition(Position(RelativePosition(BottomLeft), 30, -126));
-		howToPlayButton->setBackground(Fill("menu-2.png"));
+		howToPlayButton = new GUIElements::Box(400, 66);
+		howToPlayButton->setPosition(Position(RelativePosition(BottomLeft), 30, -202));
+		howToPlayButton->setBackground(Fill("main_menu-how_to_play.png"));
 
-		exitGameButton = new GUIElements::Box(406, 66);
+		optionsButton = new GUIElements::Box(400, 66);
+		optionsButton->setPosition(Position(RelativePosition(BottomLeft), 30, -116));
+		optionsButton->setBackground(Fill("main_menu-options.png"));
+
+		exitGameButton = new GUIElements::Box(400, 66);
 		exitGameButton->setPosition(Position(RelativePosition(BottomLeft), 30, -30));
-		exitGameButton->setBackground(Fill("menu-3.png"));
+		exitGameButton->setBackground(Fill("main_menu-exit_game.png"));
 	}
 	catch (std::exception)
 	{
-		delete optionsButton;
+		delete startGameButton;
 		delete howToPlayButton;
+		delete optionsButton;
 		delete exitGameButton;
+
+		throw;
 	}
 
-	guiCanvas->addElement(optionsButton);
+	guiCanvas->addElement(startGameButton);
 	guiCanvas->addElement(howToPlayButton);
+	guiCanvas->addElement(optionsButton);
 	guiCanvas->addElement(exitGameButton);
 }
