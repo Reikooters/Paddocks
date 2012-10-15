@@ -13,7 +13,19 @@
  *************************************************************************/
 #include "Application.h"
 
-int main (int argc, char **argv)
+
+/* Hide console window on Windows release builds. Otherwise, if not on
+ * Windows, or if creating a debug build (on any platform), use the
+ * console. */
+#ifndef _DEBUG
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+    INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
+#else
+    int main(int argc, char **argv)
+#endif
+#else
+	int main(int argc, char **argv)
+#endif
 {
 	std::auto_ptr<Application> app(new Application());
 
