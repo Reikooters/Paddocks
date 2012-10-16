@@ -182,6 +182,27 @@ bool MainMenuState::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID
 
 bool MainMenuState::keyPressed(const OIS::KeyEvent &arg)
 {
+	switch (arg.key)
+	{
+	// Enter key pressed
+	case OIS::KC_RETURN:
+		// If Alt key is held down
+		if (InputManager::getSingletonPtr()->getKeyboard()->isModifierDown(OIS::Keyboard::Alt))
+		{
+			// Switch between window mode/full screen
+			ogrePtrs.window->setFullscreen(!ogrePtrs.window->isFullScreen(),
+				ogrePtrs.viewport->getActualWidth(), ogrePtrs.viewport->getActualHeight());
+
+			/* Update window and viewport dimensions (needed to fix a bug where the
+			 * viewport is smaller than it should be, when going from full->window). */
+			ogrePtrs.window->update();
+			ogrePtrs.viewport->setDimensions(0, 0, 1, 1);
+
+			// Tell GUI it needs to be redrawn
+			guiCanvas->setDirty();
+		}
+		break;
+	}
 	return guiCanvas->injectKeyDown(arg);
 }
 
@@ -189,7 +210,7 @@ bool MainMenuState::keyReleased(const OIS::KeyEvent &arg)
 {
 	guiCanvas->injectKeyUp(arg);
 
-	switch(arg.key)
+	switch (arg.key)
 	{
 	case OIS::KC_ESCAPE:
 		break;
