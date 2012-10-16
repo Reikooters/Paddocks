@@ -95,13 +95,7 @@ void MainMenuState::createGUI()
 
 	guiCanvas.reset(new GUICanvas(ogrePtrs.camera, ogrePtrs.sceneManager, texList, fontList));
 
-	/*
-	GUIElements::Box* fullscreenMatte = new GUIElements::Box(ogrePtrs.camera->getViewport()->getActualWidth(), 
-		ogrePtrs.camera->getViewport()->getActualHeight());
-	fullscreenMatte->setPosition(Position(Center));
-	fullscreenMatte->setBackground(Fill(parseHexColor("#00050a"), parseHexColor("#06182c")));
-	*/
-
+	GUIElements::Box* fullscreenMatte = NULL;
 	GUIElements::Box* startGameButton = NULL;
 	GUIElements::Box* howToPlayButton = NULL;
 	GUIElements::Box* optionsButton = NULL;
@@ -109,6 +103,12 @@ void MainMenuState::createGUI()
 
 	try
 	{
+		fullscreenMatte = new GUIElements::Box(ogrePtrs.camera->getViewport()->getActualWidth(), 
+		ogrePtrs.camera->getViewport()->getActualHeight());
+		fullscreenMatte->setPosition(Position(Center));
+		fullscreenMatte->setBackground(Fill(parseHexColor("#00050a"), parseHexColor("#06182c")));
+		guiElements["fullscreenMatte"] = fullscreenMatte;
+
 		startGameButton = new GUIElements::Box(400, 66);
 		startGameButton->setPosition(Position(RelativePosition(BottomLeft), 30, -288));
 		startGameButton->setBackground(Fill("main_menu-start_game.png"));
@@ -138,12 +138,14 @@ void MainMenuState::createGUI()
 	}
 	catch (std::exception)
 	{
+		delete fullscreenMatte;
 		delete startGameButton;
 		delete howToPlayButton;
 		delete optionsButton;
 		delete exitGameButton;
 
 		std::list<std::map<Ogre::String, GUIElement*>::iterator> itlist;
+		itlist.push_back(guiElements.find("fullscreenMatte"));
 		itlist.push_back(guiElements.find("startGameButton"));
 		itlist.push_back(guiElements.find("howToPlayButton"));
 		itlist.push_back(guiElements.find("optionsButton"));
@@ -158,6 +160,7 @@ void MainMenuState::createGUI()
 		throw;
 	}
 
+	guiCanvas->addElement(fullscreenMatte);
 	guiCanvas->addElement(startGameButton);
 	guiCanvas->addElement(howToPlayButton);
 	guiCanvas->addElement(optionsButton);
@@ -189,17 +192,21 @@ bool MainMenuState::keyPressed(const OIS::KeyEvent &arg)
 		// If Alt key is held down
 		if (InputManager::getSingletonPtr()->getKeyboard()->isModifierDown(OIS::Keyboard::Alt))
 		{
+			Ogre::Vector2 res(Application::getSingletonPtr()->getConfigIni()->getConfigs().resolution);
 			// Switch between window mode/full screen
 			ogrePtrs.window->setFullscreen(!ogrePtrs.window->isFullScreen(),
-				ogrePtrs.viewport->getActualWidth(), ogrePtrs.viewport->getActualHeight());
+				(unsigned int)res.x, (unsigned int)res.y);
 
 			/* Update window and viewport dimensions (needed to fix a bug where the
 			 * viewport is smaller than it should be, when going from full->window). */
 			ogrePtrs.window->update();
 			ogrePtrs.viewport->setDimensions(0, 0, 1, 1);
 
-			// Tell GUI it needs to be redrawn
+			// Tell GUI it needs to be redrawn, and reset clipping
+			guiCanvas->getCanvas()->clearClip();
 			guiCanvas->setDirty();
+
+			static_cast<GUIElements::Box*>(guiElements["fullscreenMatte"])->setSize(res.x, res.y);
 		}
 		break;
 	}

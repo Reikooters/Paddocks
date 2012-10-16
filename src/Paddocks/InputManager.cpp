@@ -25,6 +25,7 @@ InputManager* InputManager::getSingletonPtr()
 	return inputManager;
 }
 
+
 /*************************************************************************
  * InputManager::InputManager
  *************************************************************************
