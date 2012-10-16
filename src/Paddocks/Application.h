@@ -23,7 +23,7 @@ class GameState;
  *************************************************************************
  * Application class.
  *************************************************************************/
-class Application
+class Application : public Ogre::WindowEventListener
 {
 	// Variables
 	// -------------------------------------------------------------
@@ -79,4 +79,10 @@ public:
 	// Constructor + Destructor
 	Application();
 	~Application();
+
+	// Window events
+	void windowMoved(Ogre::RenderWindow* rw);
+	void windowResized(Ogre::RenderWindow* rw);
+	void windowClosed(Ogre::RenderWindow* rw);
+	void windowFocusChange(Ogre::RenderWindow* rw);
 };

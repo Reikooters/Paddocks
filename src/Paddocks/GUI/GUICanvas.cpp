@@ -149,7 +149,11 @@ bool GUICanvas::injectMouseMove(int x, int y)
 bool GUICanvas::injectMouseDown(int x, int y)
 {
 	int bLeft, bTop, bRight, bBottom;
-	for(std::vector<GUIElement*>::iterator i = elements.begin(); i != elements.end(); ++i)
+	//for(std::vector<GUIElement*>::iterator i = elements.begin(); i != elements.end(); ++i)
+	/* Edit by Reiko
+	 * Clicked object is now found in reverse, so the element on top is the
+	 * one that catches the click. */
+	for(std::vector<GUIElement*>::reverse_iterator i = elements.rbegin(); i != elements.rend(); ++i)
 	{
 		(*i)->getBounds(bLeft, bTop, bRight, bBottom);
 		if(x >= bLeft && y >= bTop && x <= bRight && y <= bBottom)

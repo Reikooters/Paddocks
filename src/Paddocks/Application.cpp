@@ -201,6 +201,9 @@ bool Application::initOgre()
 
 		// Create the render window, using our configurations.
 		ogrePtrs.window = ogrePtrs.root->createRenderWindow(windowTitle, (unsigned int)configs.resolution.x, (unsigned int)configs.resolution.y, configs.fullscreen, &params);
+
+		// Make the game render even while the window does not have focus.
+		ogrePtrs.window->setDeactivateOnFocusChange(false);
 	}
 
 	// STEP 6: Assign the frame listener
@@ -301,7 +304,7 @@ bool Application::createScene()
 	ogrePtrs.viewport = ogrePtrs.window->addViewport(ogrePtrs.camera);
 
 	// Set the drawing background colour.
-	ogrePtrs.viewport->setBackgroundColour(Ogre::ColourValue(0.0f, 1.0f, 0.0f));
+	ogrePtrs.viewport->setBackgroundColour(Ogre::ColourValue(0.0f, 0.0f, 0.0f));
 
 	// Alter the camera aspect ratio to match the viewport
 	ogrePtrs.camera->setAspectRatio(
@@ -409,4 +412,51 @@ void Application::cleanupGameStates()
 		states.pop_back();
 	}
 	activeState = NULL;
+}
+
+
+/*************************************************************************
+ * Application::windowMoved()
+ *************************************************************************
+ * Called when the window is moved.
+ *************************************************************************/
+void Application::windowMoved(Ogre::RenderWindow* rw)
+{
+
+}
+
+
+/*************************************************************************
+ * Application::windowResized()
+ *************************************************************************
+ * Called when the window is resized.
+ *************************************************************************/
+void Application::windowResized(Ogre::RenderWindow* rw)
+{
+	inputManager->setWindowExtents(rw->getWidth(), rw->getHeight());
+
+	if (activeState)
+		activeState->windowResized(rw->getWidth(), rw->getHeight());
+}
+
+
+/*************************************************************************
+ * Application::windowClosed()
+ *************************************************************************
+ * Called when the window is closed.
+ *************************************************************************/
+void Application::windowClosed(Ogre::RenderWindow* rw)
+{
+
+}
+
+
+/*************************************************************************
+ * Application::windowFocusChanged()
+ *************************************************************************
+ * Called when the window is focused or loses focus.
+ *************************************************************************/
+void Application::windowFocusChange(Ogre::RenderWindow* rw)
+{
+
 }

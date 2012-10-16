@@ -22,7 +22,8 @@
  * Constructor.
  *************************************************************************/
 MainMenuState::MainMenuState(OgrePtrs &ogrePtrs, InputManager *inputManager)
-	: ogrePtrs(ogrePtrs), inputManager(inputManager)
+	: ogrePtrs(ogrePtrs), inputManager(inputManager),
+	boolOpenExitConfirmation(false)
 {
 
 }
@@ -50,6 +51,9 @@ void MainMenuState::enter()
 void MainMenuState::update(const Ogre::Real deltaTimeSecs)
 {
 	guiCanvas->update();
+
+	if (boolOpenExitConfirmation)
+		openExitConfirmation();
 }
 
 
@@ -60,7 +64,7 @@ void MainMenuState::update(const Ogre::Real deltaTimeSecs)
  *************************************************************************/
 void MainMenuState::exit()
 {
-	
+
 }
 
 
@@ -71,7 +75,11 @@ void MainMenuState::exit()
  *************************************************************************/
 void MainMenuState::createGUI()
 {
+	FontFaceDefinition verdana("verdana.ttf");
+	verdana.addSize(14);
+
 	std::vector<FontFaceDefinition> fontList;
+	fontList.push_back(verdana);
 
 	std::vector<Ogre::String> texList;
 	texList.push_back("main_menu-start_game.png");
@@ -101,24 +109,32 @@ void MainMenuState::createGUI()
 
 	try
 	{
-		startGameButton = new GUIElements::Button("", 0, "");
-		startGameButton->setSize(400, 66);
+		startGameButton = new GUIElements::Box(400, 66);
 		startGameButton->setPosition(Position(RelativePosition(BottomLeft), 30, -288));
 		startGameButton->setBackground(Fill("main_menu-start_game.png"));
 		startGameButton->bindEvent("click", GUIDelegate(this, &MainMenuState::startGameClicked));
+		startGameButton->setBorder(Border(3, parseHexColor("#83493d")));
+		guiElements["startGameButton"] = startGameButton;
 
 		howToPlayButton = new GUIElements::Box(400, 66);
 		howToPlayButton->setPosition(Position(RelativePosition(BottomLeft), 30, -202));
 		howToPlayButton->setBackground(Fill("main_menu-how_to_play.png"));
 		howToPlayButton->bindEvent("click", GUIDelegate(this, &MainMenuState::startGameClicked));
+		howToPlayButton->setBorder(Border(3, parseHexColor("#83493d")));
+		guiElements["howToPlayButton"] = howToPlayButton;
 
 		optionsButton = new GUIElements::Box(400, 66);
 		optionsButton->setPosition(Position(RelativePosition(BottomLeft), 30, -116));
 		optionsButton->setBackground(Fill("main_menu-options.png"));
+		optionsButton->setBorder(Border(3, parseHexColor("#83493d")));
+		guiElements["optionsButton"] = optionsButton;
 
 		exitGameButton = new GUIElements::Box(400, 66);
 		exitGameButton->setPosition(Position(RelativePosition(BottomLeft), 30, -30));
 		exitGameButton->setBackground(Fill("main_menu-exit_game.png"));
+		exitGameButton->bindEvent("click", GUIDelegate(this, &MainMenuState::exitGameClicked));
+		exitGameButton->setBorder(Border(3, parseHexColor("#83493d")));
+		guiElements["exitGameButton"] = exitGameButton;
 	}
 	catch (std::exception)
 	{
@@ -126,6 +142,18 @@ void MainMenuState::createGUI()
 		delete howToPlayButton;
 		delete optionsButton;
 		delete exitGameButton;
+
+		std::list<std::map<Ogre::String, GUIElement*>::iterator> itlist;
+		itlist.push_back(guiElements.find("startGameButton"));
+		itlist.push_back(guiElements.find("howToPlayButton"));
+		itlist.push_back(guiElements.find("optionsButton"));
+		itlist.push_back(guiElements.find("exitGameButton"));
+
+		for (std::list<std::map<Ogre::String, GUIElement*>::iterator>::iterator it = itlist.begin(); it != itlist.end(); ++it)
+		{
+			if (*it != guiElements.end())
+				guiElements.erase(*it);
+		}
 
 		throw;
 	}
@@ -199,7 +227,118 @@ void MainMenuState::windowResized(int width, int height)
 }
 
 
+/*************************************************************************
+ * MainMenuState::startGameClicked()
+ *************************************************************************
+ * This function is called when 'Start Game' is clicked.
+ *************************************************************************/
 void MainMenuState::startGameClicked()
 {
 	std::cout << "Start game" << std::endl;
+}
+
+
+/*************************************************************************
+ * MainMenuState::exitGameClicked()
+ *************************************************************************
+ * This function is called when 'Exit Game' is clicked.
+ *************************************************************************/
+void MainMenuState::exitGameClicked()
+{
+	boolOpenExitConfirmation = true;
+}
+
+
+/*************************************************************************
+ * MainMenuState::exitYesClicked()
+ *************************************************************************
+ * This function is called when 'Yes' is clicked in the 'Exit game?'
+ * confirmation box.
+ *************************************************************************/
+void MainMenuState::exitYesClicked()
+{
+	std::cout << "exit yes" << std::endl;
+}
+
+
+/*************************************************************************
+ * MainMenuState::exitNoClicked()
+ *************************************************************************
+ * This function is called when 'No' is clicked in the 'Exit game?'
+ * confirmation box.
+ *************************************************************************/
+void MainMenuState::exitNoClicked()
+{
+	std::cout << "exit no" << std::endl;
+}
+
+
+/*************************************************************************
+ * MainMenuState::openExitConfirmation()
+ *************************************************************************
+ * Opens the 'Exit game?' confirmation box.
+ *************************************************************************/
+void MainMenuState::openExitConfirmation()
+{
+	if (!boolOpenExitConfirmation)
+		return;
+
+	boolOpenExitConfirmation = false;
+
+	GUIElements::Box* exitWindow = NULL;
+	GUIElements::Label* exitLabel = NULL;
+	GUIElements::Button* exitYesButton = NULL;
+	GUIElements::Button* exitNoButton = NULL;
+
+	Ogre::ColourValue windowColorTop(parseHexColor("#d99034"));
+	Ogre::ColourValue windowColorBottom(parseHexColor("#de9f50"));
+	windowColorTop.a = 0.5f;
+	windowColorBottom.a = 0.5f;
+
+	try
+	{
+		exitWindow = new GUIElements::Box(450, 280);
+		exitWindow->setPosition(Position(RelativePosition(Center), 0, 0));
+		exitWindow->setBackground(Fill(windowColorTop, windowColorBottom));
+		exitWindow->setBorder(Border(3, parseHexColor("#83493d")));
+		guiElements["exitWindow"] = exitWindow;
+
+		exitYesButton = new GUIElements::Button("verdana.ttf", 14, "Yes");
+		exitYesButton->setPosition(Position(RelativePosition(Center), -65, 100));
+		exitYesButton->setSize(90, 40);
+		exitYesButton->setBackground(Fill(parseHexColor("#d99034"), parseHexColor("#de9f50")));
+		exitYesButton->setDownBackground(Fill(parseHexColor("#d9a564"), parseHexColor("#dcb27e")));
+		exitYesButton->bindEvent("click", GUIDelegate(this, &MainMenuState::exitYesClicked));
+		exitYesButton->setBorder(Border(3, parseHexColor("#83493d")));
+		guiElements["exitYesButton"] = exitYesButton;
+
+		exitNoButton = new GUIElements::Button("verdana.ttf", 14, "No");
+		exitNoButton->setPosition(Position(RelativePosition(Center), 65, 100));
+		exitNoButton->setSize(90, 40);
+		exitNoButton->setBackground(Fill(parseHexColor("#d99034"), parseHexColor("#de9f50")));
+		exitNoButton->setDownBackground(Fill(parseHexColor("#d9a564"), parseHexColor("#dcb27e")));
+		exitNoButton->bindEvent("click", GUIDelegate(this, &MainMenuState::exitNoClicked));
+		exitNoButton->setBorder(Border(3, parseHexColor("#83493d")));
+		guiElements["exitNoButton"] = exitNoButton;
+	}
+	catch (std::exception)
+	{
+		delete exitWindow;
+		delete exitYesButton;
+
+		std::list<std::map<Ogre::String, GUIElement*>::iterator> itlist;
+		itlist.push_back(guiElements.find("exitWindow"));
+		itlist.push_back(guiElements.find("exitYesButton"));
+		itlist.push_back(guiElements.find("exitNo"));
+
+		for (std::list<std::map<Ogre::String, GUIElement*>::iterator>::iterator it = itlist.begin(); it != itlist.end(); ++it)
+		{
+			if (*it != guiElements.end())
+				guiElements.erase(*it);
+		}
+	}
+
+	guiCanvas->addElement(exitWindow);
+	guiCanvas->addElement(exitYesButton);
+	guiCanvas->addElement(exitNoButton);
 }
