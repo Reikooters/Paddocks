@@ -55,6 +55,9 @@ void GUICanvas::removeElement(GUIElement* element)
 
 			if(element == focusedElement)
 				focusedElement = 0;
+
+			// Added by Reiko
+			return;
 		}
 	}
 }
