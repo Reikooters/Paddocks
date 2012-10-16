@@ -27,7 +27,9 @@
 	int main(int argc, char **argv)
 #endif
 {
-	std::auto_ptr<Application> app(new Application());
+	Application *appPtr = Application::getSingletonPtr();
+
+	std::auto_ptr<Application> app(appPtr);
 
 	int result = EXIT_FAILURE;
 

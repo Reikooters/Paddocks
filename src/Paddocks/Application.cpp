@@ -15,6 +15,16 @@
 #include "Application.h"
 #include "MainMenuState.h"
 
+Application *Application::application;
+
+Application* Application::getSingletonPtr()
+{
+	if (!application)
+		application = new Application();
+
+	return application;
+}
+
 
 /*************************************************************************
  * Application::Application()
@@ -22,7 +32,8 @@
  * Constructor. Initialises variables.
  *************************************************************************/
 Application::Application()
-	: lastTime(timer.getMilliseconds()), running(true)
+	: lastTime(timer.getMilliseconds()), running(true),
+	activeState(NULL)
 {
 	frameListener.reset(new PaddocksFrameListener());
 }
@@ -228,7 +239,7 @@ void Application::mainLoop()
 	ogrePtrs.root->clearEventTimes();
 
 	// Main program loop.
-	while (true)
+	while (running)
 	{
 		Ogre::Real deltaTime = (timer.getMilliseconds()-lastTime)/1000.0f;
 		lastTime = timer.getMilliseconds();
@@ -255,20 +266,16 @@ void Application::mainLoop()
 			// If window isn't closed, render a frame
 			if (running)
 				running = ogrePtrs.root->renderOneFrame();
-
-			/* If the program is stopping, clean up GameStates and exit. */
-			if (!running)
-			{
-				// Exit the active state
-				activeState->exit();
-
-				// Clean up GameStates
-				cleanupGameStates();
-
-				return;
-			}
 		}
 	}
+
+	/* If the program is stopping, clean up GameStates and exit. */
+	// Exit the active state
+	if (activeState)
+		activeState->exit();
+
+	// Clean up GameStates
+	cleanupGameStates();
 }
 
 
@@ -392,6 +399,17 @@ void Application::setCurrentWorkingDirectory() const
 		delete [] pathBuffer;
 	}
 #endif
+}
+
+
+/*************************************************************************
+ * Application::shutdown()
+ *************************************************************************
+ * Tells the program to stop running.
+ *************************************************************************/
+void Application::shutdown()
+{
+	running = false;
 }
 
 

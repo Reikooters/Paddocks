@@ -14,6 +14,7 @@
 #include "GUIButton.h"
 #include "GUILabel.h"
 #include "InputManager.h"
+#include "Application.h"
 
 
 /*************************************************************************
@@ -257,7 +258,7 @@ void MainMenuState::exitGameClicked()
  *************************************************************************/
 void MainMenuState::exitYesClicked()
 {
-	std::cout << "exit yes" << std::endl;
+	Application::getSingletonPtr()->shutdown();
 }
 
 

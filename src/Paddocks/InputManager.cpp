@@ -14,9 +14,16 @@
  *************************************************************************/
 #include "InputManager.h"
 
-
+// Singleton stuff.
 InputManager *InputManager::inputManager;
 
+InputManager* InputManager::getSingletonPtr()
+{
+	if (!inputManager)
+		inputManager = new InputManager();
+
+	return inputManager;
+}
 
 /*************************************************************************
  * InputManager::InputManager
@@ -488,11 +495,3 @@ bool InputManager::buttonReleased(const OIS::JoyStickEvent &e, int button)
 	return true;
 }
 */
-
-InputManager* InputManager::getSingletonPtr()
-{
-	if (!inputManager)
-		inputManager = new InputManager();
-
-	return inputManager;
-}

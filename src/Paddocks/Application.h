@@ -51,6 +51,9 @@ class Application : public Ogre::WindowEventListener
 	 * exit the game. */
 	bool running;
 
+	// Singleton
+	static Application *application;
+
 
 	// Functions
 	// -------------------------------------------------------------
@@ -76,9 +79,15 @@ public:
 	// Starts the program doing it's thing.
 	int go();
 
+	// Stops the program
+	void shutdown();
+
 	// Constructor + Destructor
 	Application();
 	~Application();
+
+	// Singleton
+	static Application* getSingletonPtr();
 
 	// Window events
 	void windowMoved(Ogre::RenderWindow* rw);
