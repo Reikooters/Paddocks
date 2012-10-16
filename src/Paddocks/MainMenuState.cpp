@@ -24,7 +24,7 @@
  *************************************************************************/
 MainMenuState::MainMenuState(OgrePtrs &ogrePtrs, InputManager *inputManager)
 	: ogrePtrs(ogrePtrs), inputManager(inputManager),
-	boolOpenExitConfirmation(false)
+	boolOpenExitConfirmation(false), boolCloseExitConfirmation(false)
 {
 
 }
@@ -53,8 +53,7 @@ void MainMenuState::update(const Ogre::Real deltaTimeSecs)
 {
 	guiCanvas->update();
 
-	if (boolOpenExitConfirmation)
-		openExitConfirmation();
+	runGUISteps();
 }
 
 
@@ -270,7 +269,7 @@ void MainMenuState::exitYesClicked()
  *************************************************************************/
 void MainMenuState::exitNoClicked()
 {
-	std::cout << "exit no" << std::endl;
+	boolCloseExitConfirmation = true;
 }
 
 
@@ -281,21 +280,26 @@ void MainMenuState::exitNoClicked()
  *************************************************************************/
 void MainMenuState::openExitConfirmation()
 {
+	// Only proceed if flag is set.
 	if (!boolOpenExitConfirmation)
 		return;
 
+	// Set flag to false, so this function can't be called again.
 	boolOpenExitConfirmation = false;
 
+	// Variables we'll need.
 	GUIElements::Box* exitWindow = NULL;
-	GUIElements::Label* exitLabel = NULL;
-	GUIElements::Button* exitYesButton = NULL;
-	GUIElements::Button* exitNoButton = NULL;
+	GUIElements::Label* exitWindowLabel = NULL;
+	GUIElements::Button* exitWindowYesButton = NULL;
+	GUIElements::Button* exitWindowNoButton = NULL;
 
 	Ogre::ColourValue windowColorTop(parseHexColor("#d99034"));
 	Ogre::ColourValue windowColorBottom(parseHexColor("#de9f50"));
 	windowColorTop.a = 0.5f;
 	windowColorBottom.a = 0.5f;
 
+	/* We do our GUI element creating in a try/catch block so that if an
+	 * exception is raised, we can do the necessary clean up. */
 	try
 	{
 		exitWindow = new GUIElements::Box(450, 280);
@@ -304,33 +308,43 @@ void MainMenuState::openExitConfirmation()
 		exitWindow->setBorder(Border(3, parseHexColor("#83493d")));
 		guiElements["exitWindow"] = exitWindow;
 
-		exitYesButton = new GUIElements::Button("verdana.ttf", 14, "Yes");
-		exitYesButton->setPosition(Position(RelativePosition(Center), -65, 100));
-		exitYesButton->setSize(90, 40);
-		exitYesButton->setBackground(Fill(parseHexColor("#d99034"), parseHexColor("#de9f50")));
-		exitYesButton->setDownBackground(Fill(parseHexColor("#d9a564"), parseHexColor("#dcb27e")));
-		exitYesButton->bindEvent("click", GUIDelegate(this, &MainMenuState::exitYesClicked));
-		exitYesButton->setBorder(Border(3, parseHexColor("#83493d")));
-		guiElements["exitYesButton"] = exitYesButton;
+		exitWindowLabel = new GUIElements::Label("verdana.ttf", 14, "Are you sure you wish to exit?", true);
+		exitWindowLabel->setPosition(Position(RelativePosition(Center), 0, -25));
+		exitWindowLabel->setSize(420, 160);
+		//exitWindowLabel->setBorder(Border(3, parseHexColor("#83493d")));
+		guiElements["exitWindowLabel"] = exitWindowLabel;
 
-		exitNoButton = new GUIElements::Button("verdana.ttf", 14, "No");
-		exitNoButton->setPosition(Position(RelativePosition(Center), 65, 100));
-		exitNoButton->setSize(90, 40);
-		exitNoButton->setBackground(Fill(parseHexColor("#d99034"), parseHexColor("#de9f50")));
-		exitNoButton->setDownBackground(Fill(parseHexColor("#d9a564"), parseHexColor("#dcb27e")));
-		exitNoButton->bindEvent("click", GUIDelegate(this, &MainMenuState::exitNoClicked));
-		exitNoButton->setBorder(Border(3, parseHexColor("#83493d")));
-		guiElements["exitNoButton"] = exitNoButton;
+		exitWindowYesButton = new GUIElements::Button("verdana.ttf", 14, "Yes");
+		exitWindowYesButton->setPosition(Position(RelativePosition(Center), -65, 100));
+		exitWindowYesButton->setSize(90, 40);
+		exitWindowYesButton->setBackground(Fill(parseHexColor("#d99034"), parseHexColor("#de9f50")));
+		exitWindowYesButton->setDownBackground(Fill(parseHexColor("#d9a564"), parseHexColor("#dcb27e")));
+		exitWindowYesButton->bindEvent("click", GUIDelegate(this, &MainMenuState::exitYesClicked));
+		exitWindowYesButton->setBorder(Border(3, parseHexColor("#83493d")));
+		guiElements["exitWindowYesButton"] = exitWindowYesButton;
+
+		exitWindowNoButton = new GUIElements::Button("verdana.ttf", 14, "No");
+		exitWindowNoButton->setPosition(Position(RelativePosition(Center), 65, 100));
+		exitWindowNoButton->setSize(90, 40);
+		exitWindowNoButton->setBackground(Fill(parseHexColor("#d99034"), parseHexColor("#de9f50")));
+		exitWindowNoButton->setDownBackground(Fill(parseHexColor("#d9a564"), parseHexColor("#dcb27e")));
+		exitWindowNoButton->bindEvent("click", GUIDelegate(this, &MainMenuState::exitNoClicked));
+		exitWindowNoButton->setBorder(Border(3, parseHexColor("#83493d")));
+		guiElements["exitWindowNoButton"] = exitWindowNoButton;
 	}
 	catch (std::exception)
 	{
+		// If an exception was raised, do the necessary cleanup.
 		delete exitWindow;
-		delete exitYesButton;
+		delete exitWindowLabel;
+		delete exitWindowYesButton;
+		delete exitWindowNoButton;
 
 		std::list<std::map<Ogre::String, GUIElement*>::iterator> itlist;
 		itlist.push_back(guiElements.find("exitWindow"));
-		itlist.push_back(guiElements.find("exitYesButton"));
-		itlist.push_back(guiElements.find("exitNo"));
+		itlist.push_back(guiElements.find("exitWindowLabel"));
+		itlist.push_back(guiElements.find("exitWindowYesButton"));
+		itlist.push_back(guiElements.find("exitWindowNoButton"));
 
 		for (std::list<std::map<Ogre::String, GUIElement*>::iterator>::iterator it = itlist.begin(); it != itlist.end(); ++it)
 		{
@@ -340,6 +354,62 @@ void MainMenuState::openExitConfirmation()
 	}
 
 	guiCanvas->addElement(exitWindow);
-	guiCanvas->addElement(exitYesButton);
-	guiCanvas->addElement(exitNoButton);
+	guiCanvas->addElement(exitWindowLabel);
+	guiCanvas->addElement(exitWindowYesButton);
+	guiCanvas->addElement(exitWindowNoButton);
+}
+
+
+/*************************************************************************
+ * MainMenuState::closeExitConfirmation()
+ *************************************************************************
+ * Closes the 'Exit game?' confirmation box.
+ *************************************************************************/
+void MainMenuState::closeExitConfirmation()
+{
+	// Only proceed if flag is set.
+	if (!boolCloseExitConfirmation)
+		return;
+
+	// Set flag to false, so this function can't be called again.
+	boolCloseExitConfirmation = false;
+
+	// Items to be deleted.
+	std::list<Ogre::String> items;
+	items.push_back("exitWindow");
+	items.push_back("exitWindowLabel");
+	items.push_back("exitWindowYesButton");
+	items.push_back("exitWindowNoButton");
+
+	// Remove GUI elements from canvas
+	for (std::list<Ogre::String>::iterator it = items.begin(); it != items.end(); ++it)
+		guiCanvas->removeElement(guiElements[*it]);
+
+	// Delete pointers from guiElements map.
+	std::list<std::map<Ogre::String, GUIElement*>::iterator> itlist;
+	for (std::list<Ogre::String>::iterator it = items.begin(); it != items.end(); ++it)
+		itlist.push_back(guiElements.find(*it));
+
+	for (std::list<std::map<Ogre::String, GUIElement*>::iterator>::iterator it = itlist.begin(); it != itlist.end(); ++it)
+	{
+		if (*it != guiElements.end())
+			guiElements.erase(*it);
+	}
+}
+
+
+/*************************************************************************
+ * MainMenuState::runGUISteps()
+ *************************************************************************
+ * Runs any GUI related functions that need to be called.
+ *************************************************************************/
+void MainMenuState::runGUISteps()
+{
+	// Open Exit Confirmation
+	if (boolOpenExitConfirmation)
+		openExitConfirmation();
+
+	// Close Exit Confirmation
+	if (boolCloseExitConfirmation)
+		closeExitConfirmation();
 }

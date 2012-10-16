@@ -36,12 +36,13 @@ class MainMenuState : public GameState
 	std::auto_ptr<GUICanvas> guiCanvas;
 	std::map<Ogre::String, GUIElement*> guiElements;
 	bool boolOpenExitConfirmation;
+	bool boolCloseExitConfirmation;
 
 	// Functions
 	// -------------------------------------------------------------
-	void createGUI();
-
 	// GUI
+	void createGUI();
+	void runGUISteps();
 	// Bindings
 	void startGameClicked();
 	void exitGameClicked();
@@ -49,6 +50,7 @@ class MainMenuState : public GameState
 	void exitNoClicked();
 	// Other functions
 	void openExitConfirmation();
+	void closeExitConfirmation();
 
 	// Functions inherited from GameState
 	bool mouseMoved(const OIS::MouseEvent &arg);
