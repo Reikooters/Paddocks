@@ -120,8 +120,8 @@ bool Application::initOgre()
 	// Create a list of plugins we'll use. 
 	{
 		std::vector<Ogre::String> pluginNames;
-		pluginNames.push_back("RenderSystem_GL");
-		//pluginNames.push_back("RenderSystem_Direct3D9");
+		//pluginNames.push_back("RenderSystem_GL");
+		pluginNames.push_back("RenderSystem_Direct3D9");
 		pluginNames.push_back("Plugin_ParticleFX");
 		pluginNames.push_back("Plugin_CgProgramManager");
 		//pluginNames.push_back("Plugin_PCZSceneManager");
