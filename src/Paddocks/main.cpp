@@ -27,9 +27,12 @@
 	int main(int argc, char **argv)
 #endif
 {
+	// Initialise singletons, and create an auto_ptr for each
 	Application *appPtr = Application::getSingletonPtr();
+	InputManager *inpPtr = InputManager::getSingletonPtr();
 
 	std::auto_ptr<Application> app(appPtr);
+	std::auto_ptr<InputManager> inp(inpPtr);
 
 	int result = EXIT_FAILURE;
 
