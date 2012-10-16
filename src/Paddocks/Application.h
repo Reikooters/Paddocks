@@ -29,7 +29,6 @@ class Application : public Ogre::WindowEventListener
 	// -------------------------------------------------------------
 	std::auto_ptr<PaddocksFrameListener> frameListener;
 	std::auto_ptr<ConfigIni> configIni;
-	std::auto_ptr<InputManager> inputManager;
 
 	Ogre::Timer timer;
 	unsigned long lastTime;
@@ -89,9 +88,24 @@ public:
 	// Singleton
 	static Application* getSingletonPtr();
 
-	// Window events
+	// Getters
+	ConfigIni* getConfigIni();
+
+	/* Window events (called automatically, as this class
+	 * Derives from Ogre::WindowEventListener */
 	void windowMoved(Ogre::RenderWindow* rw);
 	void windowResized(Ogre::RenderWindow* rw);
 	void windowClosed(Ogre::RenderWindow* rw);
 	void windowFocusChange(Ogre::RenderWindow* rw);
 };
+
+
+/*************************************************************************
+ * Application::getConfigIni()
+ *************************************************************************
+ * Returns a pointer to the ConfigIni class.
+ *************************************************************************/
+inline ConfigIni* Application::getConfigIni()
+{
+	return configIni.get();
+}

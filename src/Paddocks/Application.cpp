@@ -15,6 +15,7 @@
 #include "Application.h"
 #include "MainMenuState.h"
 
+// Singleton stuff.
 Application *Application::application;
 
 Application* Application::getSingletonPtr()
@@ -73,11 +74,11 @@ int Application::go()
 	createScene();
 
 	// Create the Input Manager
-	inputManager.reset(InputManager::getSingletonPtr());
+	InputManager *inputManager = InputManager::getSingletonPtr();
 	inputManager->initialise(ogrePtrs.window);
 
 	// Create the Main Menu game state
-	states.push_back(new MainMenuState(ogrePtrs, inputManager.get()));
+	states.push_back(new MainMenuState(ogrePtrs, inputManager));
 
 	// Set it as the active state
 	activeState = states.back();
@@ -451,7 +452,7 @@ void Application::windowMoved(Ogre::RenderWindow* rw)
  *************************************************************************/
 void Application::windowResized(Ogre::RenderWindow* rw)
 {
-	inputManager->setWindowExtents(rw->getWidth(), rw->getHeight());
+	InputManager::getSingletonPtr()->setWindowExtents(rw->getWidth(), rw->getHeight());
 
 	if (activeState)
 		activeState->windowResized(rw->getWidth(), rw->getHeight());
